@@ -50,5 +50,20 @@ public class PendientesDAO extends BaseDAO<Tarea>{
         }
         return listaTareas;
     }
+
+    @Override
+    public void actualizar(Tarea tarea) {
+        MongoCollection coleccion = this.getCollection();
+        Document searchDoc = new Document("_id",tarea.getId());
+        Document updateDoc = new Document();
+        
+        updateDoc.append("nombre", tarea.getNombre());
+        updateDoc.append("descripcion", tarea.getDescripcion());
+        
+        Document setDoc = new Document();
+        setDoc.append("$set", updateDoc);
+        
+        coleccion.updateOne(searchDoc, setDoc);
+    }
     
 }

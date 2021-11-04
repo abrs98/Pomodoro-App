@@ -49,5 +49,6 @@ public abstract class BaseDAO<T> {
      protected abstract MongoCollection<T> getCollection();
      public abstract void agregar(T etidad);
      public abstract void eliminar(T etidad);
+     public abstract void actualizar(T entidad);
      public abstract ArrayList<T> consultar();
 }

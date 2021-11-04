@@ -6,6 +6,7 @@
 package vistas;
 
 import DAO.PendientesDAO;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import objetosNegocio.Tarea;
 
@@ -51,6 +52,16 @@ public class registrarTarea extends javax.swing.JFrame {
     public void limpiarCampos(){
         this.taNombre.setText("");
         this.taDesc.setText("");
+    }
+    
+    private boolean tareaRepetida(String tarea){
+        ArrayList<Tarea> listaPend = this.pendientesDAO.consultar();
+        for (Tarea t : listaPend) {
+            if (t.getNombre().equalsIgnoreCase(tarea)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -159,8 +170,14 @@ public class registrarTarea extends javax.swing.JFrame {
 
     private void btnRegTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegTareaActionPerformed
         if (nombreValido(this.taNombre.getText()) && descValida(this.taDesc.getText())) {
-            agregarTarea();
-            this.principal.conTabla();
+            if (tareaRepetida(this.taNombre.getText())!=true) {
+               agregarTarea();
+            JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
+            this.principal.conTabla(); 
+            }else{
+                JOptionPane.showMessageDialog(this, "La tarea ya existe"
+                   ,"Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
+            }
         }else {
             JOptionPane.showMessageDialog(this, "El campo de nombre y/o descripción se encuentran vacios"
                    ,"Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
