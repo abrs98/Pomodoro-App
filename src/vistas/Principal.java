@@ -85,7 +85,6 @@ public class Principal extends javax.swing.JFrame {
         pnlPendientes.setBackground(new java.awt.Color(255, 0, 0));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText(" Pendientes");
 
         tblPendientes.setModel(new javax.swing.table.DefaultTableModel(
@@ -134,7 +133,6 @@ public class Principal extends javax.swing.JFrame {
         pnlEnProgreso.setBackground(new java.awt.Color(255, 255, 51));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("En Progreso");
 
         tblProgreso.setModel(new javax.swing.table.DefaultTableModel(
@@ -184,7 +182,6 @@ public class Principal extends javax.swing.JFrame {
         pnlTerminadas.setBackground(new java.awt.Color(0, 204, 0));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Terminadas");
 
         tblTerminadas.setModel(new javax.swing.table.DefaultTableModel(
