@@ -5,6 +5,9 @@
  */
 package objetosNegocio;
 
+import java.util.Objects;
+import org.bson.types.ObjectId;
+
 /**
  *
  * @author Abrahan Barrios
@@ -15,7 +18,7 @@ public class Tarea {
     private int tiempoPomodoro;
     private int tiempoDescanso;
     private String estado;
-    private int id;
+    private ObjectId id;
 
     public Tarea() {
     }
@@ -23,6 +26,12 @@ public class Tarea {
     public Tarea(String nombre, String descripcion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+    }
+
+    public Tarea(String nombre, String descripcion, String estado) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = estado;
     }
     
     
@@ -67,13 +76,54 @@ public class Tarea {
         this.estado = estado;
     }
 
-    public int getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tarea other = (Tarea) obj;
+        if (this.tiempoPomodoro != other.tiempoPomodoro) {
+            return false;
+        }
+        if (this.tiempoDescanso != other.tiempoDescanso) {
+            return false;
+        }
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.descripcion, other.descripcion)) {
+            return false;
+        }
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    
     
     
     
