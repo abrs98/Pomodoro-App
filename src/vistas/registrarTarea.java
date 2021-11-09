@@ -6,8 +6,15 @@
 package vistas;
 
 import DAO.PendientesDAO;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import objetosNegocio.Tarea;
 
 /**
@@ -15,46 +22,54 @@ import objetosNegocio.Tarea;
  * @author david
  */
 public class registrarTarea extends javax.swing.JFrame {
-    
+
     private PendientesDAO pendientesDAO = null;
     Principal principal;
-    
+    Fondopanel fondo = new Fondopanel();
+    Principal ventana= new Principal();
+
     public registrarTarea() {
+        this.setContentPane(fondo);
         this.pendientesDAO = new PendientesDAO();
         this.principal = new Principal();
         initComponents();
+        this.setLocationRelativeTo(this);
+        setResizable(false);
+        this.setTitle("Registrar tarea");
         this.principal.refresh();
         this.principal.conTabla();
+        ventana.setVisible(true);
+         
     }
-    
-   public boolean nombreValido(String nombre){
-       if (this.taNombre.getText().length() > 0 && this.taNombre.getText().length() <= 100) {
-           return true;
-       }
-       return false;
-   }
-   
-   public boolean descValida(String Desc){
-       if (this.taDesc.getText().length() > 0 && this.taDesc.getText().length() <= 100) {
-           return true;
-       }
-       return false;
-   } 
-    
-    public void agregarTarea(){
+
+    public boolean nombreValido(String nombre) {
+        if (this.taNombre.getText().length() > 0 && this.taNombre.getText().length() <= 100) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean descValida(String Desc) {
+        if (this.taDesc.getText().length() > 0 && this.taDesc.getText().length() <= 100) {
+            return true;
+        }
+        return false;
+    }
+
+    public void agregarTarea() {
         String nombre = this.taNombre.getText();
         String desc = this.taDesc.getText();
         String est = "Pendiente";
-        Tarea t = new Tarea(nombre, desc,est);
+        Tarea t = new Tarea(nombre, desc, est);
         this.pendientesDAO.agregar(t);
     }
-    
-    public void limpiarCampos(){
+
+    public void limpiarCampos() {
         this.taNombre.setText("");
         this.taDesc.setText("");
     }
-    
-    private boolean tareaRepetida(String tarea){
+
+    private boolean tareaRepetida(String tarea) {
         ArrayList<Tarea> listaPend = this.pendientesDAO.consultar();
         for (Tarea t : listaPend) {
             if (t.getNombre().equalsIgnoreCase(tarea)) {
@@ -82,32 +97,79 @@ public class registrarTarea extends javax.swing.JFrame {
         taDesc = new javax.swing.JTextArea();
         btnRegTarea = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(102, 102, 255,80));
+        jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(204, 0, 204), null, java.awt.Color.lightGray));
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nombre:");
 
         taNombre.setColumns(20);
         taNombre.setRows(5);
+        taNombre.setBorder(null);
+        taNombre.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                taNombreMouseMoved(evt);
+            }
+        });
         jScrollPane1.setViewportView(taNombre);
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Descripción:");
 
         taDesc.setColumns(20);
         taDesc.setRows(5);
+        taDesc.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                taDescMouseMoved(evt);
+            }
+        });
         jScrollPane2.setViewportView(taDesc);
 
+        btnRegTarea.setBackground(new java.awt.Color(0, 0, 0));
+        btnRegTarea.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegTarea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/comprobado (1).png"))); // NOI18N
         btnRegTarea.setText("Registrar");
+        btnRegTarea.setBorder(null);
+        btnRegTarea.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnRegTareaMouseMoved(evt);
+            }
+        });
         btnRegTarea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegTareaActionPerformed(evt);
             }
         });
 
-        btnCerrar.setText("Cerrar");
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Cancelar.png"))); // NOI18N
+        btnCerrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCerrar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseMoved(evt);
+            }
+        });
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarActionPerformed(evt);
+            }
+        });
+
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/limpiar.png"))); // NOI18N
+        btnLimpiar.setBorder(null);
+        btnLimpiar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnLimpiarMouseMoved(evt);
+            }
+        });
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -118,34 +180,40 @@ public class registrarTarea extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(213, 213, 213)
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCerrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegTarea)))
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(107, 107, 107)
+                                .addComponent(btnRegTarea, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(7, 7, 7)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegTarea)
-                    .addComponent(btnCerrar)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRegTarea, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -153,14 +221,14 @@ public class registrarTarea extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -170,26 +238,67 @@ public class registrarTarea extends javax.swing.JFrame {
 
     private void btnRegTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegTareaActionPerformed
         if (nombreValido(this.taNombre.getText()) && descValida(this.taDesc.getText())) {
-            if (tareaRepetida(this.taNombre.getText())!=true) {
-               agregarTarea();
-            JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
-            this.principal.conTabla(); 
-            }else{
-                JOptionPane.showMessageDialog(this, "La tarea ya existe"
-                   ,"Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
+            if (tareaRepetida(this.taNombre.getText()) != true) {
+                agregarTarea();
+                JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
+                this.principal.conTabla();
+                this.dispose();
+                ventana.dispose();
+                principal.setVisible(true);
+               
+            } else {
+                JOptionPane.showMessageDialog(this, "La tarea ya existe",
+                         "Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
             }
-        }else {
-            JOptionPane.showMessageDialog(this, "El campo de nombre y/o descripción se encuentran vacios"
-                   ,"Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "El campo de nombre y/o descripción se encuentran vacios",
+                     "Error al registrar tarea", JOptionPane.WARNING_MESSAGE);
         }
         limpiarCampos();
-        
+         
+
     }//GEN-LAST:event_btnRegTareaActionPerformed
 
+   
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        this.dispose();
-        principal.setVisible(true);
+      int eleccion = JOptionPane.showConfirmDialog(null, "Si regresa no se guardaran los cambion. ¿Desea salir?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+       if(JOptionPane.YES_OPTION == eleccion){
+            this.dispose();
+           
+       }
+       
+        
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void taNombreMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taNombreMouseMoved
+        String texto = "Nombre de la tarea";
+        taNombre.setToolTipText(texto);
+    }//GEN-LAST:event_taNombreMouseMoved
+
+    private void taDescMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taDescMouseMoved
+        String texto = "Descripcion de la tarea";
+        taDesc.setToolTipText(texto);
+    }//GEN-LAST:event_taDescMouseMoved
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+       limpiarCampos();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnLimpiarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseMoved
+        // TODO add your handling code here:
+        String texto = "Limpiar campos";
+        btnLimpiar.setToolTipText(texto);
+    }//GEN-LAST:event_btnLimpiarMouseMoved
+
+    private void btnCerrarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseMoved
+        String texto = "Regresar inicio";
+        btnCerrar.setToolTipText(texto);
+    }//GEN-LAST:event_btnCerrarMouseMoved
+
+    private void btnRegTareaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegTareaMouseMoved
+       String texto = "Registrar tarea en la lista de pendiente";
+        btnRegTarea.setToolTipText(texto);
+    }//GEN-LAST:event_btnRegTareaMouseMoved
 
     /**
      * @param args the command line arguments
@@ -228,7 +337,8 @@ public class registrarTarea extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnRegTarea;
+    private javax.swing.JButton btnLimpiar;
+    public javax.swing.JButton btnRegTarea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -237,4 +347,16 @@ public class registrarTarea extends javax.swing.JFrame {
     private javax.swing.JTextArea taDesc;
     private javax.swing.JTextArea taNombre;
     // End of variables declaration//GEN-END:variables
+
+    class Fondopanel extends JPanel {
+
+        private Image imagen;
+
+        public void paint(Graphics g) {
+            imagen = new ImageIcon(getClass().getResource("/iconos/fondo.jpg")).getImage();
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+            setOpaque(false);
+            super.paint(g);
+        }
+    }
 }
