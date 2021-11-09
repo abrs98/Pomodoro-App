@@ -8,15 +8,14 @@ package vistas;
 import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
 import DAO.TerminadasDAO;
-import java.sql.PreparedStatement;
+import DragnDrop.TableRowTransferHandler;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Vector;
+import javax.swing.DropMode;
 import javax.swing.JTable;
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import objetosNegocio.Tarea;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -27,29 +26,23 @@ public class Principal extends javax.swing.JFrame {
     String hora, minutos, segundos;
     Thread h1;
 
-    private PendientesDAO pendientesDAO = null;
-    private EnProcesoDAO enProcesoDAO = null;
-    private TerminadasDAO tdao = null;
-    Tarea tarea = null;
+    private PendientesDAO pDAO = null;
+    private EnProcesoDAO epDAO = null;
+    private TerminadasDAO tDAO = null;
     
-    /**
-     * Creates new form Principal
-     */
     public Principal() {
-        this.pendientesDAO = new PendientesDAO();
-        this.enProcesoDAO = new EnProcesoDAO();
-        this.tdao = new TerminadasDAO();
-        this.tarea = new Tarea();
+        this.pDAO = new PendientesDAO();
+        this.epDAO = new EnProcesoDAO();
+        this.tDAO = new TerminadasDAO();
         initComponents();
-        conTabla();
-        refresh();
+        conTablaPend();
+        refreshTPend();
+        conTablaEP();
+        refreshTEP();
+        conTablaTerm();
+        refreshTT();
     }
     
-    public void refresh(){
-        tblPendientes.updateUI();
-        tblPendientes.repaint();
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -76,11 +69,13 @@ public class Principal extends javax.swing.JFrame {
         btnPausar = new javax.swing.JButton();
         brnCancelar = new javax.swing.JButton();
         btnTerminar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 255));
         jPanel1.setForeground(new java.awt.Color(153, 153, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(813, 580));
 
         pnlPendientes.setBackground(new java.awt.Color(255, 0, 0));
 
@@ -97,6 +92,10 @@ public class Principal extends javax.swing.JFrame {
             }
         ));
         tblPendientes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblPendientes.setCellSelectionEnabled(true);
+        tblPendientes.setDragEnabled(true);
+        tblPendientes.setDropMode(javax.swing.DropMode.ON);
+        tblPendientes.setEnabled(false);
         tblPendientes.setMaximumSize(new java.awt.Dimension(180, 380));
         tblPendientes.setMinimumSize(new java.awt.Dimension(180, 380));
         tblPendientes.setPreferredSize(new java.awt.Dimension(180, 380));
@@ -243,6 +242,11 @@ public class Principal extends javax.swing.JFrame {
         lblTemporizador.setText("12:00:00");
 
         btnIniciar.setText("Iniciar");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
 
         btnPausar.setText("Pausar");
         btnPausar.addActionListener(new java.awt.event.ActionListener() {
@@ -259,6 +263,8 @@ public class Principal extends javax.swing.JFrame {
                 btnTerminarActionPerformed(evt);
             }
         });
+
+        btnActualizar.setText("Actualizar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -279,15 +285,17 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(btnRegistrarTarea)
-                        .addGap(105, 105, 105)
+                        .addGap(63, 63, 63)
                         .addComponent(btnIniciar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnPausar)
                         .addGap(18, 18, 18)
                         .addComponent(brnCancelar)
                         .addGap(18, 18, 18)
-                        .addComponent(btnTerminar)))
-                .addContainerGap(47, Short.MAX_VALUE))
+                        .addComponent(btnPausar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTerminar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnActualizar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,20 +312,23 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(btnRegistrarTarea)
                     .addComponent(btnIniciar)
                     .addComponent(btnPausar)
+                    .addComponent(btnTerminar)
                     .addComponent(brnCancelar)
-                    .addComponent(btnTerminar))
-                .addContainerGap(42, Short.MAX_VALUE))
+                    .addComponent(btnActualizar))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
         );
 
         pack();
@@ -332,30 +343,158 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
-        refresh();
+        refreshTPend();
         dispose();
         this.setVisible(false);
         registrarTarea regTarea = new registrarTarea();
         regTarea.setVisible(true);
     }//GEN-LAST:event_btnRegistrarTareaActionPerformed
 
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        iniciar();
+        refreshTPend();
+        refreshTEP();
+    }//GEN-LAST:event_btnIniciarActionPerformed
     
-    
-    protected void conTabla(){
-        String title[] = {"Nombre"};
-        String info[][] = obtMatriz();
-        this.tblPendientes = new JTable(info,title);
-        this.barra1.setViewportView(this.tblPendientes);
+    public void refreshTPend(){
+        this.tblPendientes.updateUI();
+        this.tblPendientes.repaint();
     }
     
-    protected String[][] obtMatriz(){
-        ArrayList<Tarea> listaPendientes = this.pendientesDAO.consultar();
-        String pends [][] =  new String[listaPendientes.size()][1];
-        for (int i = 0; i < listaPendientes.size(); i++) {
-            pends[i][0] = listaPendientes.get(i).getNombre();
+    public void refreshTEP(){
+        this.tblProgreso.updateUI();
+        this.tblProgreso.repaint();
+    }
+    
+    public void refreshTT(){
+        this.tblTerminadas.updateUI();
+        this.tblTerminadas.repaint();
+    }
+    
+    public String[][] tareasP(){
+        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+        String pend [][] = new String[listTareas.size()][1];
+        for (int i = 0; i < listTareas.size(); i++) {
+            pend[i][0] = listTareas.get(i).getNombre();
         }
-        return pends;
+        return pend;
     }
+    
+    public String[][] tareasEP(){
+        ArrayList<Tarea> listTareas = this.epDAO.consultar();
+        String enpro [][] = new String[listTareas.size()][1];
+        for (int i = 0; i < listTareas.size(); i++) {
+            enpro[i][0] = listTareas.get(i).getNombre();
+        }
+        return enpro;
+    }
+    
+    public String[][] tareasT(){
+        ArrayList<Tarea> listTareas = this.tDAO.consultar();
+        String term [][] = new String[listTareas.size()][1];
+        for (int i = 0; i < listTareas.size(); i++) {
+            term[i][0] = listTareas.get(i).getNombre();
+        }
+        return term;
+    }
+    
+    public void conTablaPend(){
+        String title[] = {"Nombre"};
+        String info[][] = tareasP();
+        DefaultTableModel model =  new DefaultTableModel(info,title){
+            public boolean isCellEditable(int fila, int cols){
+               return false;
+            }
+        };
+        model.setRowCount(0);
+        model.setDataVector(info, title);
+        tblPendientes.setModel(model);
+        this.tblPendientes.setEnabled(true);
+        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+        this.tblPendientes.setRowSelectionAllowed(true);
+//        isSelectionEditable(tblPendientes);
+//        
+        this.tblPendientes.setDragEnabled(true);
+        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
+        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
+    }
+    
+    public void conTablaEP(){
+        String title[] = {"Nombre"};
+        String info[][] = tareasEP();
+        DefaultTableModel model = (DefaultTableModel) this.tblProgreso.getModel();
+        model.setRowCount(0);
+        model.setDataVector(info, title);
+        this.tblProgreso.setEnabled(true);
+//        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+//        for (int i = 0; i < listTareas.size(); i++) {
+//            modeloTabla.isCellEdit(i, 0);
+//        }
+//        this.tblPendientes.setDragEnabled(true);
+//        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
+//        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
+    }
+    
+    public void conTablaTerm(){
+        String title[] = {"Nombre"};
+        String info[][] = tareasT();
+        DefaultTableModel model = (DefaultTableModel) this.tblTerminadas.getModel();
+        model.setRowCount(0);
+        model.setDataVector(info, title);
+        this.tblTerminadas.setEnabled(true);
+//        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+//        for (int i = 0; i < listTareas.size(); i++) {
+//            modeloTabla.isCellEdit(i, 0);
+//        }
+//        this.tblPendientes.setDragEnabled(true);
+//        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
+//        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
+    }
+    
+    protected boolean isSelectionEditable( JTable table ) {
+	if( table.getRowSelectionAllowed() ) {
+		int columnCount = table.getColumnCount();
+		int[] selectedRows = table.getSelectedRows();
+		for( int selectedRow : selectedRows ) {
+			for( int column = 0; column < columnCount; column++ ) {
+				if( table.isCellEditable( selectedRow, column ) )
+					return true;
+			}
+		}
+	}
+
+	if( table.getColumnSelectionAllowed() ) {
+		int rowCount = table.getRowCount();
+		int[] selectedColumns = table.getSelectedColumns();
+		for( int selectedColumn : selectedColumns ) {
+			for( int row = 0; row < rowCount; row++ ) {
+				if( table.isCellEditable( row, selectedColumn ) )
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+    
+    public void iniciar(){
+        ObjectId id;
+        String name = "", desc= "", status = "En Proceso";
+        int fila = this.tblPendientes.getSelectedRow();
+        String valor = this.tblPendientes.getValueAt(fila, 0).toString();
+        ArrayList<Tarea> listaTareaS = this.pDAO.consultar();
+        for (int i = fila; i < listaTareaS.size(); i++) {
+            name = listaTareaS.get(fila).getNombre();
+            desc = listaTareaS.get(fila).getDescripcion();
+            id = listaTareaS.get(fila).getId();
+        }
+        Tarea tareaEP = new Tarea(name, desc, status);
+        epDAO.agregar(tareaEP);
+        DefaultTableModel tareasP = (DefaultTableModel) this.tblPendientes.getModel();
+        tareasP.removeRow(fila);
+        pDAO.eliminar(tareaEP);
+        conTablaEP();
+    }   
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -392,6 +531,7 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane barra1;
     private javax.swing.JButton brnCancelar;
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnIniciar;
     private javax.swing.JButton btnPausar;
     private javax.swing.JButton btnRegistrarTarea;

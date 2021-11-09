@@ -23,8 +23,8 @@ public class registrarTarea extends javax.swing.JFrame {
         this.pendientesDAO = new PendientesDAO();
         this.principal = new Principal();
         initComponents();
-        this.principal.refresh();
-        this.principal.conTabla();
+        this.principal.refreshTPend();
+        this.principal.conTablaPend();
     }
     
    public boolean nombreValido(String nombre){
@@ -172,8 +172,9 @@ public class registrarTarea extends javax.swing.JFrame {
         if (nombreValido(this.taNombre.getText()) && descValida(this.taDesc.getText())) {
             if (tareaRepetida(this.taNombre.getText())!=true) {
                agregarTarea();
+               this.principal.conTablaPend();
             JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
-            this.principal.conTabla(); 
+            this.principal.conTablaEP();
             }else{
                 JOptionPane.showMessageDialog(this, "La tarea ya existe"
                    ,"Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
