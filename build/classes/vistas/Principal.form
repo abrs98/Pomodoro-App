@@ -96,7 +96,11 @@
                       <Component id="brnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnTerminar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+<<<<<<< HEAD
                   <EmptySpace pref="42" max="32767" attributes="0"/>
+=======
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
               </Group>
           </Group>
         </DimensionLayout>
@@ -119,7 +123,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
+<<<<<<< HEAD
                       <Component id="barra1" min="-2" pref="194" max="-2" attributes="0"/>
+=======
+                      <Component id="jScrollPane4" min="-2" pref="194" max="-2" attributes="0"/>
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -130,7 +138,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+<<<<<<< HEAD
                       <Component id="barra1" max="32767" attributes="0"/>
+=======
+                      <Component id="jScrollPane4" max="32767" attributes="0"/>
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -148,7 +160,11 @@
                 <Property name="text" type="java.lang.String" value=" Pendientes"/>
               </Properties>
             </Component>
+<<<<<<< HEAD
             <Container class="javax.swing.JScrollPane" name="barra1">
+=======
+            <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
@@ -162,7 +178,13 @@
                     <Component class="javax.swing.JTable" name="tblPendientes">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+<<<<<<< HEAD
                           <Table columnCount="0" rowCount="0"/>
+=======
+                          <Table columnCount="1" rowCount="4">
+                            <Column editable="true" title="Nombre" type="java.lang.Object"/>
+                          </Table>
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
                         </Property>
                         <Property name="autoResizeMode" type="int" value="0"/>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -254,7 +276,13 @@
                     <Component class="javax.swing.JTable" name="tblProgreso">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+<<<<<<< HEAD
                           <Table columnCount="0" rowCount="0"/>
+=======
+                          <Table columnCount="1" rowCount="4">
+                            <Column editable="true" title="Nombre" type="java.lang.Object"/>
+                          </Table>
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
                         </Property>
                         <Property name="autoResizeMode" type="int" value="0"/>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -350,7 +378,13 @@
                     <Component class="javax.swing.JTable" name="tblTerminadas">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+<<<<<<< HEAD
                           <Table columnCount="0" rowCount="0"/>
+=======
+                          <Table columnCount="1" rowCount="4">
+                            <Column editable="true" title="Nombre" type="java.lang.Object"/>
+                          </Table>
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
                         </Property>
                         <Property name="autoResizeMode" type="int" value="0"/>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -389,9 +423,12 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Registrar Tarea"/>
           </Properties>
+<<<<<<< HEAD
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarTareaActionPerformed"/>
           </Events>
+=======
+>>>>>>> 62fc092cb11d836be539c70da21d4bb5272b5d2f
         </Component>
         <Component class="javax.swing.JLabel" name="lblTemporizador">
           <Properties>
