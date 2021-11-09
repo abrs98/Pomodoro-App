@@ -11,6 +11,7 @@ import DAO.TerminadasDAO;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimerTask;
 import javax.swing.JTable;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -24,14 +25,15 @@ import objetosNegocio.Tarea;
  */
 public class Principal extends javax.swing.JFrame {
 
-    String hora, minutos, segundos;
-    Thread h1;
-
+    private boolean INICIA = false;
+    private boolean CANCELA = false;
+    private boolean TERMINA = false;
+    private boolean PAUSA = false;
     private PendientesDAO pendientesDAO = null;
     private EnProcesoDAO enProcesoDAO = null;
     private TerminadasDAO tdao = null;
     Tarea tarea = null;
-    
+
     /**
      * Creates new form Principal
      */
@@ -44,10 +46,33 @@ public class Principal extends javax.swing.JFrame {
         conTabla();
         refresh();
     }
-    
-    public void refresh(){
+
+    public void refresh() {
         tblPendientes.updateUI();
         tblPendientes.repaint();
+    }
+
+    public void checkTime() {
+        java.util.Timer timer = new java.util.Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int segundos = 0;
+            int minutos= 0;
+
+            public void run() {
+
+                if (INICIA) {
+                    lblTemporizador.setText(minutos+":" + segundos);
+                    segundos++;
+
+                    if (segundos > 59) {
+                        minutos++;
+                        segundos=0;
+                    }
+                }
+                
+            }
+        }, 0, 1000);
     }
 
     @SuppressWarnings("unchecked")
@@ -85,7 +110,6 @@ public class Principal extends javax.swing.JFrame {
         pnlPendientes.setBackground(new java.awt.Color(255, 0, 0));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText(" Pendientes");
 
         tblPendientes.setModel(new javax.swing.table.DefaultTableModel(
@@ -134,7 +158,6 @@ public class Principal extends javax.swing.JFrame {
         pnlEnProgreso.setBackground(new java.awt.Color(255, 255, 51));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("En Progreso");
 
         tblProgreso.setModel(new javax.swing.table.DefaultTableModel(
@@ -184,7 +207,6 @@ public class Principal extends javax.swing.JFrame {
         pnlTerminadas.setBackground(new java.awt.Color(0, 204, 0));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Terminadas");
 
         tblTerminadas.setModel(new javax.swing.table.DefaultTableModel(
@@ -243,6 +265,11 @@ public class Principal extends javax.swing.JFrame {
         lblTemporizador.setText("12:00:00");
 
         btnIniciar.setText("Iniciar");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
 
         btnPausar.setText("Pausar");
         btnPausar.addActionListener(new java.awt.event.ActionListener() {
@@ -252,6 +279,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         brnCancelar.setText("Cancelar");
+        brnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                brnCancelarActionPerformed(evt);
+            }
+        });
 
         btnTerminar.setText("Terminar");
         btnTerminar.addActionListener(new java.awt.event.ActionListener() {
@@ -325,10 +357,16 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausarActionPerformed
         // TODO add your handling code here:
+        INICIA=false;
+        btnIniciar.setEnabled(true);
+        btnIniciar.setText("Reanudar");
+     //   lblTemporizador.setText("Tarea Pausada");
+        
     }//GEN-LAST:event_btnPausarActionPerformed
 
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
         // TODO add your handling code here:
+        lblTemporizador.setText("Tarea terminada");
     }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
@@ -339,24 +377,35 @@ public class Principal extends javax.swing.JFrame {
         regTarea.setVisible(true);
     }//GEN-LAST:event_btnRegistrarTareaActionPerformed
 
-    
-    
-    protected void conTabla(){
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        // TODO add your handling code here:
+        lblTemporizador.setText("Tarea Iniciada");
+        INICIA = true;
+        checkTime();
+        btnIniciar.setEnabled(false);
+    }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void brnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnCancelarActionPerformed
+        // TODO add your handling code here:
+        lblTemporizador.setText("Tarea Cancelada");
+    }//GEN-LAST:event_brnCancelarActionPerformed
+
+    protected void conTabla() {
         String title[] = {"Nombre"};
         String info[][] = obtMatriz();
-        this.tblPendientes = new JTable(info,title);
+        this.tblPendientes = new JTable(info, title);
         this.barra1.setViewportView(this.tblPendientes);
     }
-    
-    protected String[][] obtMatriz(){
+
+    protected String[][] obtMatriz() {
         ArrayList<Tarea> listaPendientes = this.pendientesDAO.consultar();
-        String pends [][] =  new String[listaPendientes.size()][1];
+        String pends[][] = new String[listaPendientes.size()][1];
         for (int i = 0; i < listaPendientes.size(); i++) {
             pends[i][0] = listaPendientes.get(i).getNombre();
         }
         return pends;
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
