@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -29,6 +31,8 @@ public class Principal extends javax.swing.JFrame {
     private boolean CANCELA = false;
     private boolean TERMINA = false;
     private boolean PAUSA = false;
+    private int segundos=0;
+    private int minutos=0;
     private PendientesDAO pendientesDAO = null;
     private EnProcesoDAO enProcesoDAO = null;
     private TerminadasDAO tdao = null;
@@ -45,6 +49,7 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         conTabla();
         refresh();
+        
     }
 
     public void refresh() {
@@ -55,9 +60,8 @@ public class Principal extends javax.swing.JFrame {
     public void checkTime() {
         java.util.Timer timer = new java.util.Timer();
 
+        btnPausar.setEnabled(true);
         timer.scheduleAtFixedRate(new TimerTask() {
-            int segundos = 0;
-            int minutos= 0;
 
             public void run() {
 
@@ -69,13 +73,16 @@ public class Principal extends javax.swing.JFrame {
                         minutos++;
                         segundos=0;
                     }
+                }else if(PAUSA){
+                    JOptionPane.showMessageDialog(null, "Se ha pausado el temporizador");
+                    cancel();
                 }
                 
             }
         }, 0, 1000);
     }
 
-    @SuppressWarnings("unchecked")
+   
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -358,7 +365,9 @@ public class Principal extends javax.swing.JFrame {
     private void btnPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausarActionPerformed
         // TODO add your handling code here:
         INICIA=false;
+        PAUSA=true;
         btnIniciar.setEnabled(true);
+        btnPausar.setEnabled(false);
         btnIniciar.setText("Reanudar");
      //   lblTemporizador.setText("Tarea Pausada");
         
