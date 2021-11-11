@@ -8,6 +8,7 @@ package vistas;
 import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
 import DAO.TerminadasDAO;
+import DragnDrop.TableRowTransferHandler;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.sql.PreparedStatement;
@@ -19,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import objetosNegocio.Tarea;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -26,13 +28,9 @@ import objetosNegocio.Tarea;
  */
 public class Principal extends javax.swing.JFrame {
 
-    String hora, minutos, segundos;
-    Thread h1;
-
-    private PendientesDAO pendientesDAO = null;
-    private EnProcesoDAO enProcesoDAO = null;
-    private TerminadasDAO tdao = null;
-    Tarea tarea = null;
+    private PendientesDAO pDAO = null;
+    private EnProcesoDAO epDAO = null;
+    private TerminadasDAO tDAO = null;
     Fondopanel fondo = new Fondopanel();
     
     /**
@@ -40,21 +38,20 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         this.setContentPane(fondo);
-        this.pendientesDAO = new PendientesDAO();
-        this.enProcesoDAO = new EnProcesoDAO();
-        this.tdao = new TerminadasDAO();
-        this.tarea = new Tarea();
+        this.pDAO = new PendientesDAO();
+        this.epDAO = new EnProcesoDAO();
+        this.tDAO = new TerminadasDAO();
         initComponents();
+        conTablaPend();
+        refreshTPend();
+        conTablaEP();
+        refreshTEP();
+        conTablaTerm();
+        refreshTT();
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Tecnica Pomodoro");
-        conTabla();
-        refresh();
-    }
-    
-    public void refresh(){
-        tblPendientes.updateUI();
-        tblPendientes.repaint();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -88,6 +85,7 @@ public class Principal extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -162,7 +160,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -365,12 +363,21 @@ public class Principal extends javax.swing.JFrame {
                 btnIniciarMouseMoved(evt);
             }
         });
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
 
         jSeparator1.setBackground(new java.awt.Color(255, 255, 255));
 
         jSeparator2.setBackground(new java.awt.Color(130, 47, 157));
         jSeparator2.setForeground(new java.awt.Color(130, 47, 157));
         jSeparator2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(130, 47, 157)));
+
+        jButton1.setBackground(new java.awt.Color(0, 0, 0));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Actualizar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -379,30 +386,36 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(btnTerminar, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
-                            .addComponent(jSeparator1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(btnRegistrarTarea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jSeparator2)
-                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jSeparator3)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(lblTemporizador)
-                                        .addGap(76, 76, 76)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(brnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jSeparator4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(12, 12, 12)
+                                        .addComponent(btnTerminar, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                                    .addComponent(jSeparator1)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addComponent(btnRegistrarTarea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jSeparator2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jSeparator3)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addComponent(lblTemporizador)
+                                                .addGap(76, 76, 76)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(brnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jSeparator4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(99, 99, 99)))
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
         );
@@ -433,7 +446,9 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(btnPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(155, 155, 155))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(124, 124, 124))
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -488,7 +503,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarMouseMoved
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
-        refresh();
+        refreshTPend();
         
         registrarTarea regTarea = new registrarTarea();
         regTarea.setVisible(true);
@@ -502,23 +517,152 @@ public class Principal extends javax.swing.JFrame {
         btnRegistrarTarea.setToolTipText(texto);
     }//GEN-LAST:event_btnRegistrarTareaMouseMoved
 
-    
-    
-    protected void conTabla(){
-        String title[] = {"Nombre"};
-        String info[][] = obtMatriz();
-        this.tblPendientes = new JTable(info,title);
-        this.barra1.setViewportView(this.tblPendientes);
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        // TODO add your handling code here:
+        iniciar();
+        refreshTPend();
+        refreshTEP();
+    }//GEN-LAST:event_btnIniciarActionPerformed
+
+    public void refreshTPend(){
+        this.tblPendientes.updateUI();
+        this.tblPendientes.repaint();
     }
     
-    protected String[][] obtMatriz(){
-        ArrayList<Tarea> listaPendientes = this.pendientesDAO.consultar();
-        String pends [][] =  new String[listaPendientes.size()][1];
-        for (int i = 0; i < listaPendientes.size(); i++) {
-            pends[i][0] = listaPendientes.get(i).getNombre();
+    public void refreshTEP(){
+        this.tblProgreso.updateUI();
+        this.tblProgreso.repaint();
+    }
+    
+    public void refreshTT(){
+        this.tblTerminadas.updateUI();
+        this.tblTerminadas.repaint();
+    }
+    
+    public String[][] tareasP(){
+        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+        String pend [][] = new String[listTareas.size()][1];
+        for (int i = 0; i < listTareas.size(); i++) {
+            pend[i][0] = listTareas.get(i).getNombre();
         }
-        return pends;
+        return pend;
     }
+    
+    public String[][] tareasEP(){
+        ArrayList<Tarea> listTareas = this.epDAO.consultar();
+        String enpro [][] = new String[listTareas.size()][1];
+        for (int i = 0; i < listTareas.size(); i++) {
+            enpro[i][0] = listTareas.get(i).getNombre();
+        }
+        return enpro;
+    }
+    
+    public String[][] tareasT(){
+        ArrayList<Tarea> listTareas = this.tDAO.consultar();
+        String term [][] = new String[listTareas.size()][1];
+        for (int i = 0; i < listTareas.size(); i++) {
+            term[i][0] = listTareas.get(i).getNombre();
+        }
+        return term;
+    }
+    
+    public void conTablaPend(){
+        String title[] = {"Nombre"};
+        String info[][] = tareasP();
+        DefaultTableModel model =  new DefaultTableModel(info,title){
+            public boolean isCellEditable(int fila, int cols){
+               return false;
+            }
+        };
+        model.setRowCount(0);
+        model.setDataVector(info, title);
+        tblPendientes.setModel(model);
+        this.tblPendientes.setEnabled(true);
+        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+        this.tblPendientes.setRowSelectionAllowed(true);
+//        isSelectionEditable(tblPendientes);
+//        
+        this.tblPendientes.setDragEnabled(true);
+        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
+        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
+    }
+    
+    public void conTablaEP(){
+        String title[] = {"Nombre"};
+        String info[][] = tareasEP();
+        DefaultTableModel model = (DefaultTableModel) this.tblProgreso.getModel();
+        model.setRowCount(0);
+        model.setDataVector(info, title);
+        this.tblProgreso.setEnabled(true);
+//        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+//        for (int i = 0; i < listTareas.size(); i++) {
+//            modeloTabla.isCellEdit(i, 0);
+//        }
+//        this.tblPendientes.setDragEnabled(true);
+//        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
+//        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
+    }
+    
+    public void conTablaTerm(){
+        String title[] = {"Nombre"};
+        String info[][] = tareasT();
+        DefaultTableModel model = (DefaultTableModel) this.tblTerminadas.getModel();
+        model.setRowCount(0);
+        model.setDataVector(info, title);
+        this.tblTerminadas.setEnabled(true);
+//        ArrayList<Tarea> listTareas = this.pDAO.consultar();
+//        for (int i = 0; i < listTareas.size(); i++) {
+//            modeloTabla.isCellEdit(i, 0);
+//        }
+//        this.tblPendientes.setDragEnabled(true);
+//        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
+//        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
+    }
+    
+    protected boolean isSelectionEditable( JTable table ) {
+	if( table.getRowSelectionAllowed() ) {
+		int columnCount = table.getColumnCount();
+		int[] selectedRows = table.getSelectedRows();
+		for( int selectedRow : selectedRows ) {
+			for( int column = 0; column < columnCount; column++ ) {
+				if( table.isCellEditable( selectedRow, column ) )
+					return true;
+			}
+		}
+	}
+
+	if( table.getColumnSelectionAllowed() ) {
+		int rowCount = table.getRowCount();
+		int[] selectedColumns = table.getSelectedColumns();
+		for( int selectedColumn : selectedColumns ) {
+			for( int row = 0; row < rowCount; row++ ) {
+				if( table.isCellEditable( row, selectedColumn ) )
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+    
+    public void iniciar(){
+        ObjectId id;
+        String name = "", desc= "", status = "En Proceso";
+        int fila = this.tblPendientes.getSelectedRow();
+        String valor = this.tblPendientes.getValueAt(fila, 0).toString();
+        ArrayList<Tarea> listaTareaS = this.pDAO.consultar();
+        for (int i = fila; i < listaTareaS.size(); i++) {
+            name = listaTareaS.get(fila).getNombre();
+            desc = listaTareaS.get(fila).getDescripcion();
+            id = listaTareaS.get(fila).getId();
+        }
+        Tarea tareaEP = new Tarea(name, desc, status);
+        epDAO.agregar(tareaEP);
+        DefaultTableModel tareasP = (DefaultTableModel) this.tblPendientes.getModel();
+        tareasP.removeRow(fila);
+        pDAO.eliminar(tareaEP);
+        conTablaEP();
+    }   
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -559,6 +703,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnPausar;
     private javax.swing.JButton btnRegistrarTarea;
     private javax.swing.JButton btnTerminar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

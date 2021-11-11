@@ -36,8 +36,8 @@ public class registrarTarea extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Registrar tarea");
-        this.principal.refresh();
-        this.principal.conTabla();
+        this.principal.refreshTPend();
+        this.principal.conTablaPend();
         ventana.setVisible(true);
          
     }
@@ -201,10 +201,10 @@ public class registrarTarea extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnCerrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1))
                 .addGap(7, 7, 7)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -241,7 +241,7 @@ public class registrarTarea extends javax.swing.JFrame {
             if (tareaRepetida(this.taNombre.getText()) != true) {
                 agregarTarea();
                 JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
-                this.principal.conTabla();
+                this.principal.conTablaPend();
                 this.dispose();
                 ventana.dispose();
                 principal.setVisible(true);
