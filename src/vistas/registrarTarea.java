@@ -245,7 +245,7 @@ public class registrarTarea extends javax.swing.JFrame {
                 this.dispose();
                 ventana.dispose();
                 principal.setVisible(true);
-               
+                principal.btnIniciarIsEnable();
             } else {
                 JOptionPane.showMessageDialog(this, "La tarea ya existe",
                          "Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
