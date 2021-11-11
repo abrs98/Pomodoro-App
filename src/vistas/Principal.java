@@ -561,6 +561,7 @@ public class Principal extends javax.swing.JFrame {
         checkTime();
         btnIniciar.setEnabled(false);
         iniciar();
+        eliminarTareaPend();
         refreshTPend();
         refreshTEP();
     }//GEN-LAST:event_btnIniciarActionPerformed
