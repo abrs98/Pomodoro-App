@@ -37,10 +37,11 @@ public class Principal extends javax.swing.JFrame {
     private boolean CANCELA = false;
     private boolean TERMINA = false;
     private boolean PAUSA = false;
-    private int segundos=0;
-    private int minutos=0;
-    Tarea tarea = null;
-    
+    private int segundos = 0;
+    private int minutos = 0;
+    private Tarea tarea = null;
+    private String min, seg;
+
     /**
      * Creates new form Principal
      */
@@ -59,7 +60,7 @@ public class Principal extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Tecnica Pomodoro");
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -306,7 +307,7 @@ public class Principal extends javax.swing.JFrame {
         );
 
         lblTemporizador.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblTemporizador.setText("12:00:00");
+        lblTemporizador.setText("00:00");
         lblTemporizador.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 lblTemporizadorMouseMoved(evt);
@@ -334,6 +335,7 @@ public class Principal extends javax.swing.JFrame {
         btnTerminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/comprobado (1).png"))); // NOI18N
         btnTerminar.setText("Terminar");
         btnTerminar.setBorder(null);
+        btnTerminar.setEnabled(false);
         btnTerminar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnTerminarMouseMoved(evt);
@@ -350,6 +352,7 @@ public class Principal extends javax.swing.JFrame {
         btnPausar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-de-pausa (1).png"))); // NOI18N
         btnPausar.setText("Pausar");
         btnPausar.setBorder(null);
+        btnPausar.setEnabled(false);
         btnPausar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnPausarMouseMoved(evt);
@@ -473,32 +476,32 @@ public class Principal extends javax.swing.JFrame {
 
     private void brnCancelarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_brnCancelarMouseMoved
         // TODO add your handling code here:
-        String texto="Cancelar temporizador";
+        String texto = "Cancelar temporizador";
         brnCancelar.setToolTipText(texto);
 
     }//GEN-LAST:event_brnCancelarMouseMoved
 
     private void lblTemporizadorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTemporizadorMouseMoved
         // TODO add your handling code here:
-        String texto="Tiempo restante";
+        String texto = "Tiempo restante";
         lblTemporizador.setToolTipText(texto);
     }//GEN-LAST:event_lblTemporizadorMouseMoved
 
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
         // TODO add your handling code here:
-         lblTemporizador.setText("Tarea terminada");
+        lblTemporizador.setText("Tarea terminada");
     }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnTerminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTerminarMouseMoved
         // TODO add your handling code here:
-        String texto="Marcar como tarea terminada";
+        String texto = "Marcar como tarea terminada";
         btnTerminar.setToolTipText(texto);
     }//GEN-LAST:event_btnTerminarMouseMoved
 
     private void btnPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausarActionPerformed
         // TODO add your handling code here:
-        INICIA=false;
-        PAUSA=true;
+        INICIA = false;
+        PAUSA = true;
         btnIniciar.setEnabled(true);
         btnPausar.setEnabled(false);
         btnIniciar.setText("Reanudar");
@@ -506,90 +509,102 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnPausarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPausarMouseMoved
         // TODO add your handling code here:
-        String texto="Pausear el temporizador";
+        String texto = "Pausear el temporizador";
         btnPausar.setToolTipText(texto);
     }//GEN-LAST:event_btnPausarMouseMoved
 
     private void btnIniciarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIniciarMouseMoved
         // TODO add your handling code here:
-        String texto="Inicia el temporizador";
+        String texto = "Inicia el temporizador";
         btnIniciar.setToolTipText(texto);
     }//GEN-LAST:event_btnIniciarMouseMoved
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
         refreshTPend();
-        
+
         registrarTarea regTarea = new registrarTarea();
         regTarea.setVisible(true);
         dispose();
-       
+
     }//GEN-LAST:event_btnRegistrarTareaActionPerformed
 
     private void btnRegistrarTareaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarTareaMouseMoved
         // TODO add your handling code here:
-         String texto="Agregar tarea";
+        String texto = "Agregar tarea";
         btnRegistrarTarea.setToolTipText(texto);
     }//GEN-LAST:event_btnRegistrarTareaMouseMoved
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
-        lblTemporizador.setText("Tarea Iniciada");
-        INICIA = true;
-        checkTime();
-        btnIniciar.setEnabled(false);
-        iniciar();
-        refreshTPend();
-        refreshTEP();
+        
+        if (isTblPendientesRowSelected()) {
+            INICIA = true;
+            checkTime();
+            btnPausar.setEnabled(true);
+            btnTerminar.setEnabled(true);
+            btnIniciar.setEnabled(false);
+            iniciar();
+            refreshTPend();
+            refreshTEP();
+        } else if(PAUSA){
+            checkTime();
+            System.out.println("Se inicio de nuevo");
+            btnPausar.setEnabled(true);
+            btnTerminar.setEnabled(true);
+            PAUSA=false;
+        }else {
+            JOptionPane.showMessageDialog(null, "Necesita seleccionar una tarea para iniciar temporizador");
+        }
     }//GEN-LAST:event_btnIniciarActionPerformed
 
-    public void refreshTPend(){
+    public void refreshTPend() {
         this.tblPendientes.updateUI();
         this.tblPendientes.repaint();
     }
-    
-    public void refreshTEP(){
+
+    public void refreshTEP() {
         this.tblProgreso.updateUI();
         this.tblProgreso.repaint();
     }
-    
-    public void refreshTT(){
+
+    public void refreshTT() {
         this.tblTerminadas.updateUI();
         this.tblTerminadas.repaint();
     }
-    
-    public String[][] tareasP(){
+
+    public String[][] tareasP() {
         ArrayList<Tarea> listTareas = this.pDAO.consultar();
-        String pend [][] = new String[listTareas.size()][1];
+        String pend[][] = new String[listTareas.size()][1];
         for (int i = 0; i < listTareas.size(); i++) {
             pend[i][0] = listTareas.get(i).getNombre();
         }
         return pend;
     }
-    
-    public String[][] tareasEP(){
+
+    public String[][] tareasEP() {
         ArrayList<Tarea> listTareas = this.epDAO.consultar();
-        String enpro [][] = new String[listTareas.size()][1];
+        String enpro[][] = new String[listTareas.size()][1];
         for (int i = 0; i < listTareas.size(); i++) {
             enpro[i][0] = listTareas.get(i).getNombre();
         }
         return enpro;
     }
-    
-    public String[][] tareasT(){
+
+    public String[][] tareasT() {
         ArrayList<Tarea> listTareas = this.tDAO.consultar();
-        String term [][] = new String[listTareas.size()][1];
+        String term[][] = new String[listTareas.size()][1];
         for (int i = 0; i < listTareas.size(); i++) {
             term[i][0] = listTareas.get(i).getNombre();
         }
         return term;
     }
-    
-    public void conTablaPend(){
+
+    public void conTablaPend() {
         String title[] = {"Nombre"};
         String info[][] = tareasP();
-        DefaultTableModel model =  new DefaultTableModel(info,title){
-            public boolean isCellEditable(int fila, int cols){
-               return false;
+        DefaultTableModel model = new DefaultTableModel(info, title) {
+            public boolean isCellEditable(int fila, int cols) {
+                return false;
             }
         };
         model.setRowCount(0);
@@ -604,8 +619,8 @@ public class Principal extends javax.swing.JFrame {
         this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
         this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
     }
-    
-    public void conTablaEP(){
+
+    public void conTablaEP() {
         String title[] = {"Nombre"};
         String info[][] = tareasEP();
         DefaultTableModel model = (DefaultTableModel) this.tblProgreso.getModel();
@@ -620,8 +635,8 @@ public class Principal extends javax.swing.JFrame {
 //        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
 //        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
     }
-    
-    public void conTablaTerm(){
+
+    public void conTablaTerm() {
         String title[] = {"Nombre"};
         String info[][] = tareasT();
         DefaultTableModel model = (DefaultTableModel) this.tblTerminadas.getModel();
@@ -636,36 +651,38 @@ public class Principal extends javax.swing.JFrame {
 //        this.tblPendientes.setDropMode(DropMode.INSERT_ROWS);
 //        this.tblPendientes.setTransferHandler(new TableRowTransferHandler(this.tblPendientes));
     }
-    
-    protected boolean isSelectionEditable( JTable table ) {
-	if( table.getRowSelectionAllowed() ) {
-		int columnCount = table.getColumnCount();
-		int[] selectedRows = table.getSelectedRows();
-		for( int selectedRow : selectedRows ) {
-			for( int column = 0; column < columnCount; column++ ) {
-				if( table.isCellEditable( selectedRow, column ) )
-					return true;
-			}
-		}
-	}
 
-	if( table.getColumnSelectionAllowed() ) {
-		int rowCount = table.getRowCount();
-		int[] selectedColumns = table.getSelectedColumns();
-		for( int selectedColumn : selectedColumns ) {
-			for( int row = 0; row < rowCount; row++ ) {
-				if( table.isCellEditable( row, selectedColumn ) )
-					return true;
-			}
-		}
-	}
+    protected boolean isSelectionEditable(JTable table) {
+        if (table.getRowSelectionAllowed()) {
+            int columnCount = table.getColumnCount();
+            int[] selectedRows = table.getSelectedRows();
+            for (int selectedRow : selectedRows) {
+                for (int column = 0; column < columnCount; column++) {
+                    if (table.isCellEditable(selectedRow, column)) {
+                        return true;
+                    }
+                }
+            }
+        }
 
-	return false;
-}
-    
-    public void iniciar(){
+        if (table.getColumnSelectionAllowed()) {
+            int rowCount = table.getRowCount();
+            int[] selectedColumns = table.getSelectedColumns();
+            for (int selectedColumn : selectedColumns) {
+                for (int row = 0; row < rowCount; row++) {
+                    if (table.isCellEditable(row, selectedColumn)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void iniciar() {
         ObjectId id;
-        String name = "", desc= "", status = "En Proceso";
+        String name = "", desc = "", status = "En Proceso";
         int fila = this.tblPendientes.getSelectedRow();
         String valor = this.tblPendientes.getValueAt(fila, 0).toString();
         ArrayList<Tarea> listaTareaS = this.pDAO.consultar();
@@ -680,8 +697,8 @@ public class Principal extends javax.swing.JFrame {
         tareasP.removeRow(fila);
         pDAO.eliminar(tareaEP);
         conTablaEP();
-    }   
-    
+    }
+
     public void checkTime() {
         java.util.Timer timer = new java.util.Timer();
 
@@ -691,21 +708,31 @@ public class Principal extends javax.swing.JFrame {
             public void run() {
 
                 if (INICIA) {
-                    lblTemporizador.setText(minutos+":" + segundos);
+                    min=String.format("%02d", minutos);
+                    seg=String.format("%02d", segundos);
+                    lblTemporizador.setText(min + ":" + seg);
                     segundos++;
 
                     if (segundos > 59) {
                         minutos++;
-                        segundos=0;
+                        segundos = 0;
                     }
-                }else if(PAUSA){
+                } else if (PAUSA) {
                     JOptionPane.showMessageDialog(null, "Se ha pausado el temporizador");
                     cancel();
                 }
-                
+
             }
         }, 0, 1000);
     }
+
+    public boolean isTblPendientesRowSelected() {
+        if (!tblPendientes.getSelectionModel().isSelectionEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -769,16 +796,16 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTable tblTerminadas;
     // End of variables declaration//GEN-END:variables
 
-    class Fondopanel extends JPanel{
-    
-        private Image imagen; 
-    
-    public void paint(Graphics g){
-        imagen = new ImageIcon(getClass().getResource("/iconos/54336.png")).getImage();
-        g.drawImage(imagen, 0, 0, getWidth(), getHeight(),this);
-        setOpaque(false);
-        super.paint(g);
+    class Fondopanel extends JPanel {
+
+        private Image imagen;
+
+        public void paint(Graphics g) {
+            imagen = new ImageIcon(getClass().getResource("/iconos/54336.png")).getImage();
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+            setOpaque(false);
+            super.paint(g);
+        }
     }
-}
 
 }
