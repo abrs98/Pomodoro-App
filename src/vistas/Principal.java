@@ -581,8 +581,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTable tblProgreso;
     private javax.swing.JTable tblTerminadas;
     // End of variables declaration//GEN-END:variables
-class Fondopanel extends JPanel{
-    private Image imagen; 
+
+    class Fondopanel extends JPanel{
+    
+        private Image imagen; 
     
     public void paint(Graphics g){
         imagen = new ImageIcon(getClass().getResource("/iconos/54336.png")).getImage();
