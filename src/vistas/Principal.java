@@ -32,6 +32,9 @@ public class Principal extends javax.swing.JFrame {
     private PendientesDAO pDAO = null;
     private EnProcesoDAO epDAO = null;
     private TerminadasDAO tDAO = null;
+    
+    private Tarea tM = null;
+    
     Fondopanel fondo = new Fondopanel();
     private boolean INICIA = false;
     private boolean CANCELA = false;
@@ -61,6 +64,26 @@ public class Principal extends javax.swing.JFrame {
         this.setTitle("Tecnica Pomodoro");
         
     }
+    
+    
+    public Principal(Tarea tareita){
+        this.setContentPane(fondo);
+        this.pDAO = new PendientesDAO();
+        this.epDAO = new EnProcesoDAO();
+        this.tDAO = new TerminadasDAO();
+        this.tM = tareita;
+        initComponents();
+        conTablaPend();
+        refreshTPend();
+        conTablaEP();
+        refreshTEP();
+        conTablaTerm();
+        refreshTT();
+        this.setLocationRelativeTo(this);
+        setResizable(false);
+        this.setTitle("Tecnica Pomodoro");
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -538,10 +561,16 @@ public class Principal extends javax.swing.JFrame {
         checkTime();
         btnIniciar.setEnabled(false);
         iniciar();
+        eliminarTareaPend();
         refreshTPend();
         refreshTEP();
     }//GEN-LAST:event_btnIniciarActionPerformed
 
+    public ObjectId obtenerID(){
+        Tarea homework = this.tM;
+        return pDAO.consultarId(homework);
+    }
+    
     public void refreshTPend(){
         this.tblPendientes.updateUI();
         this.tblPendientes.repaint();
@@ -664,23 +693,33 @@ public class Principal extends javax.swing.JFrame {
 }
     
     public void iniciar(){
-        ObjectId id;
-        String name = "", desc= "", status = "En Proceso";
+        String name = "", desc= "", status = "En Progreso";
         int fila = this.tblPendientes.getSelectedRow();
         String valor = this.tblPendientes.getValueAt(fila, 0).toString();
         ArrayList<Tarea> listaTareaS = this.pDAO.consultar();
         for (int i = fila; i < listaTareaS.size(); i++) {
             name = listaTareaS.get(fila).getNombre();
             desc = listaTareaS.get(fila).getDescripcion();
-            id = listaTareaS.get(fila).getId();
         }
         Tarea tareaEP = new Tarea(name, desc, status);
         epDAO.agregar(tareaEP);
+        conTablaEP();
+    }
+    
+    public void eliminarTareaPend(){
+        int fila = this.tblPendientes.getSelectedRow();
         DefaultTableModel tareasP = (DefaultTableModel) this.tblPendientes.getModel();
         tareasP.removeRow(fila);
-        pDAO.eliminar(tareaEP);
-        conTablaEP();
-    }   
+        ArrayList<Tarea> listaTareaPend = this.pDAO.consultar();
+        for (Tarea tAE : listaTareaPend) {
+            if (tAE.getId().equals(this.obtenerID())) {
+                this.pDAO.eliminar(tAE);
+            }
+        }
+    }
+
+    
+ 
     
     public void checkTime() {
         java.util.Timer timer = new java.util.Timer();

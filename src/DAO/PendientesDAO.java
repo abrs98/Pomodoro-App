@@ -11,6 +11,7 @@ import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
 import objetosNegocio.Tarea;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -65,5 +66,16 @@ public class PendientesDAO extends BaseDAO<Tarea>{
         
         coleccion.updateOne(searchDoc, setDoc);
     }
+    
+    public ObjectId consultarId(Tarea t){
+        ObjectId id= null;
+         MongoCollection coleccion = this.getCollection();
+         FindIterable<Tarea> tareas = coleccion.find();
+         for (Tarea tarea : tareas) {
+              id= tarea.getId();
+         }
+         return id;
+    }
+
     
 }
