@@ -14,6 +14,7 @@ import java.awt.Image;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimerTask;
 import javax.swing.JTable;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -32,6 +33,13 @@ public class Principal extends javax.swing.JFrame {
     private EnProcesoDAO epDAO = null;
     private TerminadasDAO tDAO = null;
     Fondopanel fondo = new Fondopanel();
+    private boolean INICIA = false;
+    private boolean CANCELA = false;
+    private boolean TERMINA = false;
+    private boolean PAUSA = false;
+    private int segundos=0;
+    private int minutos=0;
+    Tarea tarea = null;
     
     /**
      * Creates new form Principal
@@ -478,6 +486,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
         // TODO add your handling code here:
+         lblTemporizador.setText("Tarea terminada");
     }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnTerminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTerminarMouseMoved
@@ -488,6 +497,11 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausarActionPerformed
         // TODO add your handling code here:
+        INICIA=false;
+        PAUSA=true;
+        btnIniciar.setEnabled(true);
+        btnPausar.setEnabled(false);
+        btnIniciar.setText("Reanudar");
     }//GEN-LAST:event_btnPausarActionPerformed
 
     private void btnPausarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPausarMouseMoved
@@ -519,6 +533,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
+        lblTemporizador.setText("Tarea Iniciada");
+        INICIA = true;
+        checkTime();
+        btnIniciar.setEnabled(false);
         iniciar();
         refreshTPend();
         refreshTEP();
@@ -664,6 +682,30 @@ public class Principal extends javax.swing.JFrame {
         conTablaEP();
     }   
     
+    public void checkTime() {
+        java.util.Timer timer = new java.util.Timer();
+
+        btnPausar.setEnabled(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            public void run() {
+
+                if (INICIA) {
+                    lblTemporizador.setText(minutos+":" + segundos);
+                    segundos++;
+
+                    if (segundos > 59) {
+                        minutos++;
+                        segundos=0;
+                    }
+                }else if(PAUSA){
+                    JOptionPane.showMessageDialog(null, "Se ha pausado el temporizador");
+                    cancel();
+                }
+                
+            }
+        }, 0, 1000);
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
