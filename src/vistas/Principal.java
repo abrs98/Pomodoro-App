@@ -201,7 +201,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -338,8 +338,9 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        lblTemporizador.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblTemporizador.setText("12:00:00");
+        lblTemporizador.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        lblTemporizador.setForeground(new java.awt.Color(204, 204, 204));
+        lblTemporizador.setText("00:00");
         lblTemporizador.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 lblTemporizadorMouseMoved(evt);
@@ -367,6 +368,7 @@ public class Principal extends javax.swing.JFrame {
         btnTerminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/comprobado (1).png"))); // NOI18N
         btnTerminar.setText("Terminar");
         btnTerminar.setBorder(null);
+        btnTerminar.setEnabled(false);
         btnTerminar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnTerminarMouseMoved(evt);
@@ -383,6 +385,7 @@ public class Principal extends javax.swing.JFrame {
         btnPausar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-de-pausa (1).png"))); // NOI18N
         btnPausar.setText("Pausar");
         btnPausar.setBorder(null);
+        btnPausar.setEnabled(false);
         btnPausar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnPausarMouseMoved(evt);
@@ -399,6 +402,7 @@ public class Principal extends javax.swing.JFrame {
         btnIniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/jugar (1).png"))); // NOI18N
         btnIniciar.setText("Iniciar");
         btnIniciar.setBorder(null);
+        btnIniciar.setEnabled(false);
         btnIniciar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnIniciarMouseMoved(evt);
@@ -471,12 +475,13 @@ public class Principal extends javax.swing.JFrame {
                                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jSeparator3)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addComponent(jSeparator3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(112, 112, 112)
                                                 .addComponent(lblTemporizador)
-                                                .addGap(76, 76, 76)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                         .addComponent(brnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
@@ -501,13 +506,13 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(brnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2))
+                        .addGap(60, 60, 60))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(lblTemporizador)
-                .addGap(39, 39, 39)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTemporizador)
+                        .addGap(45, 45, 45)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -536,7 +541,6 @@ public class Principal extends javax.swing.JFrame {
                 eliminarTareaProgreso();
                 conTablaPend();
                 btnIniciarIsEnable();
-                lblTemporizador.setText("Tarea cancelada");
                 JOptionPane.showConfirmDialog(this, "¡La tarea fue cancelada!",
                         "Mensaje", JOptionPane.PLAIN_MESSAGE);
             } else {
@@ -570,7 +574,6 @@ public class Principal extends javax.swing.JFrame {
             if (dialog == JOptionPane.YES_OPTION) {
                 Terminar();
                 eliminarTareaProgreso();
-                lblTemporizador.setText("Tarea terminada");
                 JOptionPane.showConfirmDialog(this, "¡La tarea fue terminada con exito!",
                         "Mensaje", JOptionPane.PLAIN_MESSAGE);
             } else {
@@ -628,25 +631,29 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarTareaMouseMoved
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        // TODO add your handling code here:
-        if (tblPendientes.getSelectedRow() != -1) {
-            lblTemporizador.setText("Tarea Iniciada");
-            INICIA = true;
-            checkTime();
-            btnIniciar.setEnabled(false);
-            iniciar();
-            eliminarTareaPend();
-            conTablaEP();
-            btnCancelarIsEnable();
-        } else if (PAUSA = true) {
-            INICIA = true;
-            checkTime();
-            btnIniciar.setEnabled(false);
-            PAUSA=false;
-           
-        } else {
-            JOptionPane.showConfirmDialog(this, "Ninguna tarea ha sido seleccionada",
-                    "Advertencia", JOptionPane.PLAIN_MESSAGE);
+        // TODO add your handling code here:\
+        if (tblProgreso.getRowCount() != 1) {
+            if (tblPendientes.getSelectedRow() != -1) {
+                INICIA = true;
+                checkTime();
+                btnIniciar.setEnabled(false);
+                iniciar();
+                eliminarTareaPend();
+                conTablaEP();
+                btnCancelarIsEnable();
+            } else if (PAUSA = true) {
+                INICIA = true;
+                checkTime();
+                btnIniciar.setEnabled(false);
+                PAUSA = false;
+                btnPausaIsEnable();
+
+            } else {
+                JOptionPane.showConfirmDialog(this, "Ninguna tarea ha sido seleccionada",
+                        "Advertencia", JOptionPane.PLAIN_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "No puedes ejecutar otra tarea!!!");
         }
     }//GEN-LAST:event_btnIniciarActionPerformed
 
@@ -663,6 +670,10 @@ public class Principal extends javax.swing.JFrame {
         conTablaEP();
         conTablaPend();
         conTablaTerm();
+        btnIniciarIsEnable();
+        btnPausaIsEnable();
+        btnCancelarIsEnable();
+        btnTermIsEnable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void bntEditarTareaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntEditarTareaMouseMoved
@@ -673,6 +684,11 @@ public class Principal extends javax.swing.JFrame {
     public ObjectId obtenerID() {
         Tarea homework = this.tM;
         return pDAO.consultarId(homework);
+    }
+
+    public ObjectId obtenerID2() {
+        Tarea homework2 = this.tM;
+        return epDAO.consultarId(homework2);
     }
 
     public void refreshTPend() {
@@ -787,13 +803,12 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void btnPausaIsEnable() {
-        if (btnIniciar.isEnabled() == true) {
-            btnPausar.setEnabled(false);
-        }
-        if (btnIniciar.isEnabled() == false && minutos == 0 && segundos == 0) {
-            btnPausar.setEnabled(false);
-        } else {
+        if (INICIA==true) {
             btnPausar.setEnabled(true);
+        } 
+        
+        if(INICIA==false){
+            btnPausar.setEnabled(false);
         }
     }
 
@@ -824,6 +839,7 @@ public class Principal extends javax.swing.JFrame {
         Tarea tareaTer = new Tarea(name, desc, status);
         tDAO.agregar(tareaTer);
         conTablaTerm();
+        lblTemporizador.setText("00:00");
     }
 
     public void Cancelar() {
@@ -858,7 +874,7 @@ public class Principal extends javax.swing.JFrame {
         tareasProg.removeRow(fila2);
         ArrayList<Tarea> listaTareaProg = this.epDAO.consultar();
         for (Tarea tAE : listaTareaProg) {
-            if (tAE.getId().equals(this.obtenerID())) {
+            if (tAE.getId().equals(this.obtenerID2())) {
                 this.epDAO.eliminar(tAE);
             }
         }

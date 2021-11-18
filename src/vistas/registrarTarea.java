@@ -5,7 +5,9 @@
  */
 package vistas;
 
+import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
+import DAO.TerminadasDAO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -24,6 +26,8 @@ import objetosNegocio.Tarea;
 public class registrarTarea extends javax.swing.JFrame {
 
     private PendientesDAO pendientesDAO = null;
+    private EnProcesoDAO enProcesoDAO = null;
+    private TerminadasDAO terminadasDAO = null;
     Principal principal;
     Fondopanel fondo = new Fondopanel();
     Principal ventana= new Principal();
@@ -31,6 +35,8 @@ public class registrarTarea extends javax.swing.JFrame {
     public registrarTarea() {
         this.setContentPane(fondo);
         this.pendientesDAO = new PendientesDAO();
+        this.enProcesoDAO = new EnProcesoDAO();
+        this.terminadasDAO = new TerminadasDAO();
         this.principal = new Principal();
         initComponents();
         this.setLocationRelativeTo(this);
@@ -72,6 +78,20 @@ public class registrarTarea extends javax.swing.JFrame {
     private boolean tareaRepetida(String tarea) {
         ArrayList<Tarea> listaPend = this.pendientesDAO.consultar();
         for (Tarea t : listaPend) {
+            if (t.getNombre().equalsIgnoreCase(tarea)) {
+                return true;
+            }
+        }
+        
+        ArrayList<Tarea> listaProgreso = this.enProcesoDAO.consultar();
+        for (Tarea t : listaProgreso) {
+            if (t.getNombre().equalsIgnoreCase(tarea)) {
+                return true;
+            }
+        }
+        
+        ArrayList<Tarea> listaTerminadas = this.terminadasDAO.consultar();
+        for (Tarea t : listaTerminadas) {
             if (t.getNombre().equalsIgnoreCase(tarea)) {
                 return true;
             }
