@@ -16,11 +16,11 @@ import org.bson.types.ObjectId;
 public class Tarea {
     private String nombre;
     private String descripcion;
-    private int tiempoPomodoro;
-    private int tiempoDescanso;
+    private int minutos;
+    private int segundos;
     private String estado;
     private ObjectId id;
-    String Fecha;
+    String Fecha; //se creo esta variable con sus get y set
 
     public String getFecha() {
         return Fecha;
@@ -44,11 +44,21 @@ public class Tarea {
         this.estado = estado;
     }
 
+    //se creo este constructor
     public Tarea(String nombre, String descripcion, String estado, String Fecha) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.estado = estado;
         this.Fecha = Fecha;
+    }
+
+    //jalar
+    public Tarea(String nombre, String descripcion, int minutos, int segundos, String estado) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.minutos = minutos;
+        this.segundos = segundos;
+        this.estado = estado;
     }
     
     
@@ -69,21 +79,24 @@ public class Tarea {
         this.descripcion = descripcion;
     }
 
-    public int getTiempoPomodoro() {
-        return tiempoPomodoro;
+    public int getMinutos() {
+        return minutos;
     }
 
-    public void setTiempoPomodoro(int tiempoPomodoro) {
-        this.tiempoPomodoro = tiempoPomodoro;
+    public void setMinutos(int minutos) {
+        this.minutos = minutos;
     }
 
-    public int getTiempoDescanso() {
-        return tiempoDescanso;
+    //jalar
+    public int getSegundos() {
+        return segundos;
     }
 
-    public void setTiempoDescanso(int tiempoDescanso) {
-        this.tiempoDescanso = tiempoDescanso;
+    public void setSegundos(int segundos) {
+        this.segundos = segundos;
     }
+
+   
 
     public String getEstado() {
         return estado;
@@ -107,6 +120,8 @@ public class Tarea {
         return hash;
     }
 
+    
+    //jalar
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -119,10 +134,10 @@ public class Tarea {
             return false;
         }
         final Tarea other = (Tarea) obj;
-        if (this.tiempoPomodoro != other.tiempoPomodoro) {
+        if (this.minutos != other.minutos) {
             return false;
         }
-        if (this.tiempoDescanso != other.tiempoDescanso) {
+        if (this.segundos != other.segundos) {
             return false;
         }
         if (!Objects.equals(this.nombre, other.nombre)) {
@@ -134,11 +149,16 @@ public class Tarea {
         if (!Objects.equals(this.estado, other.estado)) {
             return false;
         }
+        if (!Objects.equals(this.Fecha, other.Fecha)) {
+            return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
+
+   
 
     
     

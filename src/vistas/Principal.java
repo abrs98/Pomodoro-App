@@ -627,6 +627,10 @@ public class Principal extends javax.swing.JFrame {
         conTablaEP();
         conTablaPend();
         conTablaTerm();
+        btnCancelarIsEnable();
+        btnIniciarIsEnable();
+        btnPausaIsEnable();
+        btnTermIsEnable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public ObjectId obtenerID(){
@@ -654,6 +658,7 @@ public class Principal extends javax.swing.JFrame {
         this.tblTerminadas.repaint();
     }
     
+    //Aqui cree este metodo
     public String obtenerFechaHora(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm");
         return dtf.format(LocalDateTime.now());
@@ -682,7 +687,7 @@ public class Principal extends javax.swing.JFrame {
         String term [][] = new String[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
             term[i][0] = listTareas.get(i).getNombre();
-            term[i][1] = listTareas.get(i).getFecha();
+            term[i][1] = listTareas.get(i).getFecha(); //se agrego que en la columna dos aparezca la fecha
         }
         return term;
     }
@@ -719,7 +724,7 @@ public class Principal extends javax.swing.JFrame {
     }
     
     public void conTablaTerm(){
-        String title[] = {"Nombre", "Fecha"};
+        String title[] = {"Nombre", "Fecha"}; //aqui cree otra columna que se llama fecha
         String info[][] = tareasT();
         DefaultTableModel model = new DefaultTableModel(info, title){
              public boolean isCellEditable(int fila, int cols){
@@ -801,8 +806,10 @@ public class Principal extends javax.swing.JFrame {
         conTablaTerm();
     }
     
+    //jalar metodo
     public void Cancelar(){
         String name = "", desc= "", status = "En Progreso";
+        int mins = minutos, segs = segundos;
         int fila = this.tblProgreso.getSelectedRow();
         String valor = this.tblProgreso.getValueAt(fila, 0).toString();
         ArrayList<Tarea> listaTareaS = this.epDAO.consultar();
@@ -810,7 +817,7 @@ public class Principal extends javax.swing.JFrame {
             name = listaTareaS.get(fila).getNombre();
             desc = listaTareaS.get(fila).getDescripcion();
         }
-        Tarea tareaPen = new Tarea(name, desc, status);
+        Tarea tareaPen = new Tarea(name, desc,mins, segs, status);
         pDAO.agregar(tareaPen);
         conTablaTerm();
     }
