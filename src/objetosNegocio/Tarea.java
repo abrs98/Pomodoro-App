@@ -20,6 +20,15 @@ public class Tarea {
     private int tiempoDescanso;
     private String estado;
     private ObjectId id;
+    String Fecha;
+
+    public String getFecha() {
+        return Fecha;
+    }
+
+    public void setFecha(String Fecha) {
+        this.Fecha = Fecha;
+    }
 
     public Tarea() {
     }
@@ -33,6 +42,13 @@ public class Tarea {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.estado = estado;
+    }
+
+    public Tarea(String nombre, String descripcion, String estado, String Fecha) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.Fecha = Fecha;
     }
     
     
