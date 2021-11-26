@@ -36,7 +36,6 @@ public class registrarTarea extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Registrar tarea");
-        this.principal.refreshTPend();
         this.principal.conTablaPend();
         ventana.setVisible(true);
          

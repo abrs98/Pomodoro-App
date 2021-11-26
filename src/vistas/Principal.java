@@ -8,14 +8,12 @@ package vistas;
 import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
 import DAO.TerminadasDAO;
-import DragnDrop.TableRowTransferHandler;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TimerTask;
-import javax.swing.JTable;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -27,6 +25,9 @@ import org.bson.types.ObjectId;
  * @author Abrahan Barrios
  */
 public class Principal extends javax.swing.JFrame {
+    
+    JButton eliminar ; //nuevo junto con la clase Render
+    
 
     private PendientesDAO pDAO = null;
     private EnProcesoDAO epDAO = null;
@@ -52,12 +53,12 @@ public class Principal extends javax.swing.JFrame {
         this.epDAO = new EnProcesoDAO();
         this.tDAO = new TerminadasDAO();
         initComponents();
+        eliminar= new JButton(); //nuevo
+        eliminar.setName("Eliminar"); //nuevo
+        eliminar.setVisible(true); //nuevo
         conTablaPend();
-        refreshTPend();
         conTablaEP();
-        refreshTEP();
         conTablaTerm();
-        refreshTT();
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Tecnica Pomodoro");
@@ -76,12 +77,12 @@ public class Principal extends javax.swing.JFrame {
         this.tDAO = new TerminadasDAO();
         this.tM = tareita;
         initComponents();
+        eliminar= new JButton(); //nuevo
+        eliminar.setName("Eliminar"); //nuevo
+        eliminar.setVisible(true); //nuevo
         conTablaPend();
-        refreshTPend();
         conTablaEP();
-        refreshTEP();
         conTablaTerm();
-        refreshTT();
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Tecnica Pomodoro");
@@ -160,6 +161,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel1.setText(" Pendientes");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        barra1.setHorizontalScrollBar(null);
+        barra1.setMaximumSize(new java.awt.Dimension(200, 380));
+        barra1.setMinimumSize(new java.awt.Dimension(200, 380));
+        barra1.setPreferredSize(new java.awt.Dimension(200, 380));
+
         tblPendientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -169,9 +175,18 @@ public class Principal extends javax.swing.JFrame {
             }
         ));
         tblPendientes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblPendientes.setDropMode(javax.swing.DropMode.INSERT_ROWS);
         tblPendientes.setMaximumSize(new java.awt.Dimension(190, 380));
         tblPendientes.setMinimumSize(new java.awt.Dimension(190, 380));
-        tblPendientes.setPreferredSize(new java.awt.Dimension(190, 380));
+        tblPendientes.setPreferredSize(new java.awt.Dimension(186, 380));
+        tblPendientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPendientesMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblPendientesMousePressed(evt);
+            }
+        });
         jScrollPane5.setViewportView(tblPendientes);
         if (tblPendientes.getColumnModel().getColumnCount() > 0) {
             tblPendientes.getColumnModel().getColumn(0).setResizable(false);
@@ -199,7 +214,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -209,6 +224,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("En Progreso");
+
+        jScrollPane3.setHorizontalScrollBar(null);
+        jScrollPane3.setMaximumSize(new java.awt.Dimension(200, 380));
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 380));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 380));
 
         tblProgreso.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -221,8 +241,13 @@ public class Principal extends javax.swing.JFrame {
         tblProgreso.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblProgreso.setMaximumSize(new java.awt.Dimension(190, 380));
         tblProgreso.setMinimumSize(new java.awt.Dimension(190, 380));
-        tblProgreso.setPreferredSize(new java.awt.Dimension(190, 380));
+        tblProgreso.setPreferredSize(new java.awt.Dimension(186, 380));
         tblProgreso.setUpdateSelectionOnSort(false);
+        tblProgreso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProgresoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProgreso);
         if (tblProgreso.getColumnModel().getColumnCount() > 0) {
             tblProgreso.getColumnModel().getColumn(0).setResizable(false);
@@ -262,6 +287,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Terminadas");
 
+        jScrollPane2.setHorizontalScrollBar(null);
         jScrollPane2.setMaximumSize(new java.awt.Dimension(200, 380));
 
         tblTerminadas.setModel(new javax.swing.table.DefaultTableModel(
@@ -336,8 +362,8 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlEnProgreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
-                    .addComponent(pnlTerminadas, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
+                    .addComponent(pnlPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                    .addComponent(pnlTerminadas, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -592,12 +618,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarMouseMoved
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
-        refreshTPend();
-        
-        registrarTarea regTarea = new registrarTarea();
-        regTarea.setVisible(true);
-        dispose();
-       
+    registrarTarea regTarea = new registrarTarea();
+    regTarea.setVisible(true);
+    dispose();
     }//GEN-LAST:event_btnRegistrarTareaActionPerformed
 
     private void btnRegistrarTareaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarTareaMouseMoved
@@ -633,6 +656,65 @@ public class Principal extends javax.swing.JFrame {
         btnTermIsEnable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void tblPendientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendientesMouseClicked
+        int col = tblPendientes.getColumnModel().getColumnIndexAtX(evt.getX());
+        int fila = evt.getY()/tblPendientes.getRowHeight();
+        if (fila < tblPendientes.getRowCount() && fila >= 0 && col < tblPendientes.getColumnCount() && col >= 0) {
+            Object value = tblPendientes.getValueAt(fila, col);
+            if (value instanceof JButton) {
+                ((JButton) value).doClick();
+                JButton boton = (JButton)value;
+                if (boton.getName().equals("Eliminar")) {
+                    int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
+                    "Confirmación", JOptionPane.YES_NO_OPTION);
+                    if (dialog == JOptionPane.YES_OPTION) {
+                        eliminarTareaPend();
+                        btnCancelarIsEnable();
+                        btnIniciarIsEnable();
+                        btnPausaIsEnable();
+                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas pendientes", 
+                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                }else{
+                    JOptionPane.showConfirmDialog(this, "La tarea no eliminada", 
+                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_tblPendientesMouseClicked
+
+    private void tblProgresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProgresoMouseClicked
+        int col = tblProgreso.getColumnModel().getColumnIndexAtX(evt.getX());
+        int fila = evt.getY()/tblProgreso.getRowHeight();
+        if (fila < tblProgreso.getRowCount() && fila >= 0 && col < tblProgreso.getColumnCount() && col >= 0) {
+            Object value = tblProgreso.getValueAt(fila, col);
+            if (value instanceof JButton) {
+                ((JButton) value).doClick();
+                JButton boton = (JButton)value;
+                if (boton.getName().equals("Eliminar")) {
+                    int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
+                    "Confirmación", JOptionPane.YES_NO_OPTION);
+                    if (dialog == JOptionPane.YES_OPTION) {
+                        eliminarTareaProgreso();
+                        btnCancelarIsEnable();
+                        btnIniciarIsEnable();
+                        btnPausaIsEnable();
+                        btnTermIsEnable();
+                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas en progreso", 
+                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                }else{
+                    JOptionPane.showConfirmDialog(this, "La tarea no eliminada", 
+                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_tblProgresoMouseClicked
+
+    private void tblPendientesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendientesMousePressed
+        
+    }//GEN-LAST:event_tblPendientesMousePressed
+
     public ObjectId obtenerID(){
         Tarea homework = this.tM;
         return pDAO.consultarId(homework);
@@ -643,72 +725,56 @@ public class Principal extends javax.swing.JFrame {
         return epDAO.consultarId(homework2);
     }
     
-    public void refreshTPend(){
-        this.tblPendientes.updateUI();
-        this.tblPendientes.repaint();
-    }
-    
-    public void refreshTEP(){
-        this.tblProgreso.updateUI();
-        this.tblProgreso.repaint();
-    }
-    
-    public void refreshTT(){
-        this.tblTerminadas.updateUI();
-        this.tblTerminadas.repaint();
-    }
-    
     //Aqui cree este metodo
     public String obtenerFechaHora(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm");
         return dtf.format(LocalDateTime.now());
     }
     
-    public String[][] tareasP(){
+    public Object[][] tareasP(){ //Se actualizo este metodo
         ArrayList<Tarea> listTareas = this.pDAO.consultar();
-        String pend [][] = new String[listTareas.size()][1];
+        Object[][] pend= new Object[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
             pend[i][0] = listTareas.get(i).getNombre();
+            pend[i][1] = eliminar;
         }
-        return pend;
+        return  pend;
     }
     
-    public String[][] tareasEP(){
-        ArrayList<Tarea> listTareas = this.epDAO.consultar();
-        String enpro [][] = new String[listTareas.size()][1];
-        for (int i = 0; i < listTareas.size(); i++) {
-            enpro[i][0] = listTareas.get(i).getNombre();
-        }
-        return enpro;
-    }
-    
-    public String[][] tareasT(){
-        ArrayList<Tarea> listTareas = this.tDAO.consultar();
-        String term [][] = new String[listTareas.size()][2];
-        for (int i = 0; i < listTareas.size(); i++) {
-            term[i][0] = listTareas.get(i).getNombre();
-            term[i][1] = listTareas.get(i).getFecha(); //se agrego que en la columna dos aparezca la fecha
-        }
-        return term;
-    }
-    
-    public void conTablaPend(){
-        String title[] = {"Nombre"};
-        String info[][] = tareasP();
-        DefaultTableModel model =  new DefaultTableModel(info,title){
-            public boolean isCellEditable(int fila, int cols){
+    public void conTablaPend(){ //Se actualizo este metodo para que agreugue el boton eliminar
+        Object title[] = {"Nombre",""};
+        Object info[][] = tareasP();
+       
+        DefaultTableModel model =  new DefaultTableModel(info, title){
+            public boolean isCellEditable(int row, int column){
                return false;
             }
         };
         model.setRowCount(0);
         model.setDataVector(info, title);
         tblPendientes.setModel(model);
-        this.tblPendientes.setEnabled(true);
+        tblPendientes.getColumn("").setCellRenderer(new Render());
+        TableColumnModel cm = (TableColumnModel) tblPendientes.getColumnModel();
+        cm.getColumn(0).setPreferredWidth(130);
+        cm.getColumn(1).setPreferredWidth(24);
+        tblPendientes.setColumnModel(cm);
+        tblPendientes.setRowHeight(34);
     }
     
-    public void conTablaEP(){
-        String title[] = {"Nombre"};
-        String info[][] = tareasEP();
+    
+    public Object[][] tareasEP(){ //Se actualizo este metodo
+        ArrayList<Tarea> listTareas = this.epDAO.consultar();
+        Object[][] enpro = new Object[listTareas.size()][2];
+        for (int i = 0; i < listTareas.size(); i++) {
+            enpro[i][0] = listTareas.get(i).getNombre();
+            enpro[i][1] = eliminar;
+        }
+        return enpro;
+    }
+    
+    public void conTablaEP(){ //Se actualizo este metodo para que agreugue el boton eliminar
+        Object title[] = {"Nombre",""};
+        Object info[][] = tareasEP();
         DefaultTableModel model = new DefaultTableModel(info, title){
              public boolean isCellEditable(int fila, int cols){
                return false;
@@ -720,12 +786,27 @@ public class Principal extends javax.swing.JFrame {
         TableColumnModel columnModel = (TableColumnModel) tblProgreso.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
         tblProgreso.setColumnModel(columnModel);
-        this.tblProgreso.setEnabled(true);
+        tblProgreso.getColumn("").setCellRenderer(new Render());
+        TableColumnModel cm = (TableColumnModel) tblProgreso.getColumnModel();
+        cm.getColumn(0).setPreferredWidth(130);
+        cm.getColumn(1).setPreferredWidth(24);
+        tblProgreso.setColumnModel(cm);
+        tblProgreso.setRowHeight(34);
     }
     
+    public Object[][] tareasT(){ //Se actualizo este metodo
+        ArrayList<Tarea> listTareas = this.tDAO.consultar();
+        Object[][] term= new Object[listTareas.size()][2];
+        for (int i = 0; i < listTareas.size(); i++) {
+            term[i][0] = listTareas.get(i).getNombre();
+            term[i][1] = listTareas.get(i).getFecha(); //se agrego que en la columna dos aparezca la fecha
+        }
+        return term;
+    }
+        
     public void conTablaTerm(){
-        String title[] = {"Nombre", "Fecha"}; //aqui cree otra columna que se llama fecha
-        String info[][] = tareasT();
+        Object title[] = {"Nombre", "Fecha"}; //aqui cree otra columna que se llama fecha
+        Object info[][] = tareasT();
         DefaultTableModel model = new DefaultTableModel(info, title){
              public boolean isCellEditable(int fila, int cols){
                return false;
@@ -739,6 +820,8 @@ public class Principal extends javax.swing.JFrame {
         tblTerminadas.setColumnModel(columnModel);
         this.tblTerminadas.setEnabled(false);
     }
+    
+    
     
     public void btnTermIsEnable(){
         DefaultTableModel tabVacia = (DefaultTableModel) tblProgreso.getModel();
@@ -846,6 +929,8 @@ public class Principal extends javax.swing.JFrame {
         }
     }
  
+    
+    
     
     public void checkTime() {
         java.util.Timer timer = new java.util.Timer();
