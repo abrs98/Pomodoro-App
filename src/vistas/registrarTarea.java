@@ -5,7 +5,9 @@
  */
 package vistas;
 
+import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
+import DAO.TerminadasDAO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -24,6 +26,7 @@ import objetosNegocio.Tarea;
 public class registrarTarea extends javax.swing.JFrame {
 
     private PendientesDAO pendientesDAO = null;
+    private EnProcesoDAO enProcesoDAO = null;
     Principal principal;
     Fondopanel fondo = new Fondopanel();
     Principal ventana= new Principal();
@@ -31,12 +34,12 @@ public class registrarTarea extends javax.swing.JFrame {
     public registrarTarea() {
         this.setContentPane(fondo);
         this.pendientesDAO = new PendientesDAO();
+        this.enProcesoDAO = new EnProcesoDAO();
         this.principal = new Principal();
         initComponents();
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Registrar tarea");
-        this.principal.refreshTPend();
         this.principal.conTablaPend();
         ventana.setVisible(true);
          
@@ -76,6 +79,14 @@ public class registrarTarea extends javax.swing.JFrame {
                 return true;
             }
         }
+        
+        ArrayList<Tarea> listaProgreso = this.enProcesoDAO.consultar();
+        for (Tarea t : listaProgreso) {
+            if (t.getNombre().equalsIgnoreCase(tarea)) {
+                return true;
+            }
+        }
+        
         return false;
     }
 
@@ -240,7 +251,7 @@ public class registrarTarea extends javax.swing.JFrame {
         if (nombreValido(this.taNombre.getText()) && descValida(this.taDesc.getText())) {
             if (tareaRepetida(this.taNombre.getText()) != true) {
                 agregarTarea();
-                JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
+                JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente, actualice la tabla para ver cambios!");
                 this.principal.conTablaPend();
                 this.dispose();
                 ventana.dispose();
@@ -325,6 +336,7 @@ public class registrarTarea extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(registrarTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
