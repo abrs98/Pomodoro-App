@@ -260,7 +260,7 @@ public class registrarTarea extends javax.swing.JFrame {
         if (nombreValido(this.taNombre.getText()) && descValida(this.taDesc.getText())) {
             if (tareaRepetida(this.taNombre.getText()) != true) {
                 agregarTarea();
-                JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente");
+                JOptionPane.showMessageDialog(null, "La tarea se registro exitosamente, actualice la tabla para ver cambios!");
                 this.principal.conTablaPend();
                 this.dispose();
                 ventana.dispose();
