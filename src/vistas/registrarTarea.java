@@ -7,13 +7,9 @@ package vistas;
 
 import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
-import DAO.TerminadasDAO;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,8 +37,7 @@ public class registrarTarea extends javax.swing.JFrame {
         setResizable(false);
         this.setTitle("Registrar tarea");
         this.principal.conTablaPend();
-        ventana.setVisible(true);
-         
+        ventana.setVisible(true); 
     }
 
     public boolean nombreValido(String nombre) {

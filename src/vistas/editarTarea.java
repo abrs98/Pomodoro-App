@@ -5,16 +5,20 @@
  */
 package vistas;
 
+import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import objetosNegocio.Tarea;
 import org.bson.types.ObjectId;
+import pruebas.Render;
 
 /**
  *
@@ -28,21 +32,25 @@ public class editarTarea extends javax.swing.JFrame {
     Principal ventana = new Principal();
     Fondopanel fondo = new Fondopanel();
     Principal principal;
-
+    JButton eliminar ;
     private Tarea tM = null;
     private PendientesDAO pendientesDAO = null;
+    private EnProcesoDAO enProcesoDAO = null;
 
     public editarTarea() {
         this.setContentPane(fondo);
         this.pendientesDAO = new PendientesDAO();
+        this.enProcesoDAO = new EnProcesoDAO();
         this.principal = new Principal();
         initComponents();
-        conTablaPend();
-        
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Registrar tarea");
         ventana.setVisible(true);
+        eliminar= new JButton();
+        eliminar.setName("Eliminar");
+        eliminar.setVisible(true);
+        conTablaPend();
     }
 
     /**
@@ -82,6 +90,11 @@ public class editarTarea extends javax.swing.JFrame {
         jLabel1.setText(" Pendientes");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        barra1.setHorizontalScrollBar(null);
+        barra1.setMaximumSize(new java.awt.Dimension(200, 380));
+        barra1.setMinimumSize(new java.awt.Dimension(200, 380));
+        barra1.setPreferredSize(new java.awt.Dimension(200, 380));
+
         tblPendientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -91,9 +104,14 @@ public class editarTarea extends javax.swing.JFrame {
             }
         ));
         tblPendientes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tblPendientes.setMaximumSize(new java.awt.Dimension(180, 380));
-        tblPendientes.setMinimumSize(new java.awt.Dimension(180, 380));
-        tblPendientes.setPreferredSize(new java.awt.Dimension(180, 380));
+        tblPendientes.setMaximumSize(new java.awt.Dimension(190, 380));
+        tblPendientes.setMinimumSize(new java.awt.Dimension(190, 380));
+        tblPendientes.setPreferredSize(new java.awt.Dimension(186, 380));
+        tblPendientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPendientesMouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(tblPendientes);
 
         barra1.setViewportView(jScrollPane5);
@@ -117,7 +135,7 @@ public class editarTarea extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barra1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                .addComponent(barra1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -294,8 +312,36 @@ public class editarTarea extends javax.swing.JFrame {
         }
     }
 
-    public void obternerDatos() {
-      
+    public boolean nombreValido(String nombre) {
+        if (this.taNombre.getText().length() > 0 && this.taNombre.getText().length() <= 100) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean descValida(String Desc) {
+        if (this.taDesc.getText().length() > 0 && this.taDesc.getText().length() <= 100) {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean tareaRepetida(String tarea) {
+        ArrayList<Tarea> listaPend = this.pendientesDAO.consultar();
+        for (Tarea t : listaPend) {
+            if (t.getNombre().equalsIgnoreCase(tarea)) {
+                return true;
+            }
+        }
+        
+        ArrayList<Tarea> listaProgreso = this.enProcesoDAO.consultar();
+        for (Tarea t : listaProgreso) {
+            if (t.getNombre().equalsIgnoreCase(tarea)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public void eliminarTareaPend() {
@@ -310,35 +356,36 @@ public class editarTarea extends javax.swing.JFrame {
         }
     }
 
-    public String[][] tareasP() {
+    public Object[][] tareasP(){ //Se actualizo este metodo
         ArrayList<Tarea> listTareas = this.pendientesDAO.consultar();
-        String pend[][] = new String[listTareas.size()][1];
+        Object[][] pend= new Object[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
             pend[i][0] = listTareas.get(i).getNombre();
+            pend[i][1] = eliminar;
         }
-        return pend;
+        return  pend;
     }
 
-    public void conTablaPend() {
-        String title[] = {"Nombre"};
-        String info[][] = tareasP();
-        DefaultTableModel model = new DefaultTableModel(info, title) {
-            @Override
-            public boolean isCellEditable(int fila, int cols) {
-                return false;
+    public void conTablaPend(){ //Se actualizo este metodo para que agreugue el boton eliminar
+        Object title[] = {"Nombre",""};
+        Object info[][] = tareasP();
+       
+        DefaultTableModel model =  new DefaultTableModel(info, title){
+            public boolean isCellEditable(int row, int column){
+               return false;
             }
         };
         model.setRowCount(0);
         model.setDataVector(info, title);
         tblPendientes.setModel(model);
-        this.tblPendientes.setEnabled(true);
-        ArrayList<Tarea> listTareas = this.pendientesDAO.consultar();
-        this.tblPendientes.setRowSelectionAllowed(true);
-//        isSelectionEditable(tblPendientes);
-//        
-        this.tblPendientes.setDragEnabled(true);
-
+        tblPendientes.getColumn("").setCellRenderer(new Render());
+        TableColumnModel cm = (TableColumnModel) tblPendientes.getColumnModel();
+        cm.getColumn(0).setPreferredWidth(130);
+        cm.getColumn(1).setPreferredWidth(24);
+        tblPendientes.setColumnModel(cm);
+        tblPendientes.setRowHeight(34);
     }
+    
     private void taNombreMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taNombreMouseMoved
         String texto = "Nombre de la tarea";
         taNombre.setToolTipText(texto);
@@ -355,16 +402,23 @@ public class editarTarea extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActualizarMouseMoved
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        ActualizarTareaPend();
-        JOptionPane.showMessageDialog(null, "La tarea se actualizo exitosamente");
-        this.principal.conTablaPend();
-        this.dispose();
-        ventana.dispose();
-        principal.setVisible(true);
-        
-
-      
-
+        if (nombreValido(taNombre.getText()) && descValida(taDesc.getText())) {
+            if (tareaRepetida(taNombre.getText()) != true) {
+                ActualizarTareaPend();
+                JOptionPane.showMessageDialog(null, "La tarea se actualizo exitosamente");
+                this.principal.conTablaPend();
+                this.dispose();
+                ventana.dispose();
+                principal.setVisible(true);
+            }else {
+                JOptionPane.showMessageDialog(this, "La tarea ya existe",
+                         "Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "El campo de nombre y/o descripción se encuentran vacios",
+                     "Error al registrar tarea", JOptionPane.WARNING_MESSAGE);
+        }
+        limpiarCampos();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnCerrarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseMoved
@@ -409,6 +463,30 @@ public class editarTarea extends javax.swing.JFrame {
             principal.setVisible(true);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblPendientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendientesMouseClicked
+        int col = tblPendientes.getColumnModel().getColumnIndexAtX(evt.getX());
+        int fila = evt.getY()/tblPendientes.getRowHeight();
+        if (fila < tblPendientes.getRowCount() && fila >= 0 && col < tblPendientes.getColumnCount() && col >= 0) {
+            Object value = tblPendientes.getValueAt(fila, col);
+            if (value instanceof JButton) {
+                ((JButton) value).doClick();
+                JButton boton = (JButton)value;
+                if (boton.getName().equals("Eliminar")) {
+                    int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
+                        "Confirmación", JOptionPane.YES_NO_OPTION);
+                    if (dialog == JOptionPane.YES_OPTION) {
+                        eliminarTareaPend();
+                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas pendientes",
+                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                    }else{
+                        JOptionPane.showConfirmDialog(this, "La tarea no eliminada",
+                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_tblPendientesMouseClicked
 
     /**
      * @param args the command line arguments

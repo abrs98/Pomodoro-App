@@ -8,19 +8,13 @@ package vistas;
 import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
 import DAO.TerminadasDAO;
-import DragnDrop.TableRowTransferHandler;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.TimerTask;
-import javax.swing.JTable;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import objetosNegocio.Tarea;
@@ -62,9 +56,7 @@ public class Principal extends javax.swing.JFrame {
         this.epDAO = new EnProcesoDAO();
         this.tDAO = new TerminadasDAO();
         initComponents();
-        conTablaPend();
-        conTablaEP();
-        conTablaTerm();
+        
         eliminar= new JButton(); //nuevo
         eliminar.setName("Eliminar"); //nuevo
         eliminar.setVisible(true); //nuevo
@@ -76,7 +68,9 @@ public class Principal extends javax.swing.JFrame {
         this.btnIniciarIsEnable();
         this.btnPausaIsEnable();
         this.btnCancelarIsEnable();
-
+        conTablaPend();
+        conTablaEP();
+        conTablaTerm();
     }
 
     public Principal(Tarea tareita) {
@@ -86,9 +80,7 @@ public class Principal extends javax.swing.JFrame {
         this.tDAO = new TerminadasDAO();
         this.tM = tareita;
         initComponents();
-        conTablaPend();
-        conTablaEP();;
-        conTablaTerm();
+        
         eliminar= new JButton(); //nuevo
         eliminar.setName("Eliminar"); //nuevo
         eliminar.setVisible(true); //nuevo
@@ -100,6 +92,9 @@ public class Principal extends javax.swing.JFrame {
         this.btnIniciarIsEnable();
         this.btnPausaIsEnable();
         this.btnCancelarIsEnable();
+        conTablaPend();
+        conTablaEP();
+        conTablaTerm();
     }
 
     @SuppressWarnings("unchecked")
