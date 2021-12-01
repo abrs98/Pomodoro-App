@@ -7,13 +7,11 @@ package vistas;
 
 import DAO.EnProcesoDAO;
 import DAO.PendientesDAO;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -22,34 +20,35 @@ import javax.swing.table.TableColumnModel;
 import objetosNegocio.Tarea;
 import org.bson.types.ObjectId;
 import pruebas.Render;
+import sun.swing.UIAction;
 
 /**
  *
  * @author Michelle Naffate
  */
-public class editarTarea extends javax.swing.JFrame {
+public class editarEnProgreso extends javax.swing.JFrame {
 
     /**
-     * Creates new form editarTarea
+     * Creates new form editarEnProgreso
      */
     Principal ventana = new Principal();
-    Fondopanel fondo = new Fondopanel();
+    editarEnProgreso.Fondopanel fondo = new editarEnProgreso.Fondopanel();
     Principal principal;
-    
+ 
     private Tarea tM = null;
-    private PendientesDAO pendientesDAO = null;
-    private EnProcesoDAO enProcesoDAO = null;
+    private EnProcesoDAO epDAO = null;
 
-    public editarTarea() {
+
+    public editarEnProgreso() {
         this.setContentPane(fondo);
-        this.pendientesDAO = new PendientesDAO();
-        this.enProcesoDAO = new EnProcesoDAO();
+         this.epDAO = new EnProcesoDAO();
+       
         this.principal = new Principal();
         initComponents();
         this.setLocationRelativeTo(this);
         setResizable(false);
-        this.setTitle("Registrar tarea");
         ventana.setVisible(true);
+        this.setTitle("Registrar tarea");
        
         conTablaPend();
     }
@@ -63,11 +62,6 @@ public class editarTarea extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlPendientes = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        barra1 = new javax.swing.JScrollPane();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        tblPendientes = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -79,69 +73,16 @@ public class editarTarea extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        menu = new javax.swing.JMenuBar();
+        pnlEnProgreso = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblProgreso = new javax.swing.JTable();
+        jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        pnlPendientes.setBackground(new java.awt.Color(255, 51, 51,80));
-        pnlPendientes.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
-        pnlPendientes.setPreferredSize(new java.awt.Dimension(232, 48));
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText(" Pendientes");
-        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        barra1.setHorizontalScrollBar(null);
-        barra1.setMaximumSize(new java.awt.Dimension(200, 380));
-        barra1.setMinimumSize(new java.awt.Dimension(200, 380));
-        barra1.setPreferredSize(new java.awt.Dimension(200, 380));
-
-        tblPendientes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        tblPendientes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tblPendientes.setMaximumSize(new java.awt.Dimension(190, 380));
-        tblPendientes.setMinimumSize(new java.awt.Dimension(190, 380));
-        tblPendientes.setPreferredSize(new java.awt.Dimension(186, 380));
-        tblPendientes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPendientesMouseClicked(evt);
-            }
-        });
-        jScrollPane5.setViewportView(tblPendientes);
-
-        barra1.setViewportView(jScrollPane5);
-
-        javax.swing.GroupLayout pnlPendientesLayout = new javax.swing.GroupLayout(pnlPendientes);
-        pnlPendientes.setLayout(pnlPendientesLayout);
-        pnlPendientesLayout.setHorizontalGroup(
-            pnlPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPendientesLayout.createSequentialGroup()
-                .addContainerGap(64, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(54, 54, 54))
-            .addGroup(pnlPendientesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(barra1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        pnlPendientesLayout.setVerticalGroup(
-            pnlPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPendientesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barra1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 255,80));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(204, 0, 204), null, java.awt.Color.lightGray));
@@ -274,14 +215,72 @@ public class editarTarea extends javax.swing.JFrame {
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        menu.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        menu.setBorderPainted(false);
-        menu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        menu.setPreferredSize(new java.awt.Dimension(142, 31));
+        pnlEnProgreso.setBackground(new java.awt.Color(255, 255, 102));
+        pnlEnProgreso.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
 
-        jMenu1.setBackground(new java.awt.Color(204, 0, 204));
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("En Progreso");
+
+        jScrollPane3.setHorizontalScrollBar(null);
+        jScrollPane3.setMaximumSize(new java.awt.Dimension(200, 380));
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 380));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 380));
+
+        tblProgreso.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tblProgreso.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblProgreso.setMaximumSize(new java.awt.Dimension(190, 380));
+        tblProgreso.setMinimumSize(new java.awt.Dimension(190, 380));
+        tblProgreso.setPreferredSize(new java.awt.Dimension(180, 380));
+        tblProgreso.setUpdateSelectionOnSort(false);
+        tblProgreso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProgresoMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tblProgreso);
+
+        jScrollPane3.setViewportView(jScrollPane4);
+
+        javax.swing.GroupLayout pnlEnProgresoLayout = new javax.swing.GroupLayout(pnlEnProgreso);
+        pnlEnProgreso.setLayout(pnlEnProgresoLayout);
+        pnlEnProgresoLayout.setHorizontalGroup(
+            pnlEnProgresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEnProgresoLayout.createSequentialGroup()
+                .addContainerGap(60, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(58, 58, 58))
+            .addGroup(pnlEnProgresoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        pnlEnProgresoLayout.setVerticalGroup(
+            pnlEnProgresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEnProgresoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(142, 31));
+
         jMenu1.setText("Pendientes");
-        menu.add(jMenu1);
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu1);
 
         jMenu2.setBackground(new java.awt.Color(204, 0, 204));
         jMenu2.setText("En progreso");
@@ -290,9 +289,9 @@ public class editarTarea extends javax.swing.JFrame {
                 jMenu2MouseClicked(evt);
             }
         });
-        menu.add(jMenu2);
+        jMenuBar1.add(jMenu2);
 
-        setJMenuBar(menu);
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -302,36 +301,35 @@ public class editarTarea extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addComponent(pnlEnProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(67, 67, 67)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(105, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlEnProgreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    public ObjectId obtenerID() {
+ public ObjectId obtenerID() {
         Tarea homework = this.tM;
-        return pendientesDAO.consultarId(homework);
+        return epDAO.consultarId(homework);
     }
 
     public void ActualizarTareaPend() {
-        ArrayList<Tarea> listaTareaPend = this.pendientesDAO.consultar();
+        ArrayList<Tarea> listaTareaPend = this.epDAO.consultar();
         for (Tarea tAE : listaTareaPend) {
             if (tAE.getId().equals(this.obtenerID())) {
                 tAE.setNombre(taNombre.getText());
                 tAE.setDescripcion(taDesc.getText());
-                this.pendientesDAO.actualizar(tAE);
+                this.epDAO.actualizar(tAE);
             }
         }
     }
@@ -349,67 +347,67 @@ public class editarTarea extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     private boolean tareaRepetida(String tarea) {
-        ArrayList<Tarea> listaPend = this.pendientesDAO.consultar();
+        ArrayList<Tarea> listaPend = this.epDAO.consultar();
         for (Tarea t : listaPend) {
             if (t.getNombre().equalsIgnoreCase(tarea)) {
                 return true;
             }
         }
-        
-        ArrayList<Tarea> listaProgreso = this.enProcesoDAO.consultar();
+
+        ArrayList<Tarea> listaProgreso = this.epDAO.consultar();
         for (Tarea t : listaProgreso) {
             if (t.getNombre().equalsIgnoreCase(tarea)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
-    public void eliminarTareaPend() {
-        int fila = this.tblPendientes.getSelectedRow();
-        DefaultTableModel tareasP = (DefaultTableModel) this.tblPendientes.getModel();
-        tareasP.removeRow(fila);
-        ArrayList<Tarea> listaTareaPend = this.pendientesDAO.consultar();
-        for (Tarea tAE : listaTareaPend) {
+    public void eliminarTareaProgreso() {
+        int fila2 = this.tblProgreso.getSelectedRow();
+        DefaultTableModel tareasProg = (DefaultTableModel) this.tblProgreso.getModel();
+        tareasProg.removeRow(fila2);
+        ArrayList<Tarea> listaTareaProg = this.epDAO.consultar();
+        for (Tarea tAE : listaTareaProg) {
             if (tAE.getId().equals(this.obtenerID())) {
-                this.pendientesDAO.eliminar(tAE);
+                this.epDAO.eliminar(tAE);
             }
         }
     }
 
-    public Object[][] tareasP(){ //Se actualizo este metodo
-        ArrayList<Tarea> listTareas = this.pendientesDAO.consultar();
-        Object[][] pend= new Object[listTareas.size()][2];
+    public Object[][] tareasP() { //Se actualizo este metodo
+        ArrayList<Tarea> listTareas = this.epDAO.consultar();
+        Object[][] pend = new Object[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
             pend[i][0] = listTareas.get(i).getNombre();
-           
+          
         }
-        return  pend;
+        return pend;
     }
 
-    public void conTablaPend(){ //Se actualizo este metodo para que agreugue el boton eliminar
+    public void conTablaPend() { //Se actualizo este metodo para que agreugue el boton eliminar
         Object title[] = {"Nombre"};
         Object info[][] = tareasP();
-       
-        DefaultTableModel model =  new DefaultTableModel(info, title){
-            public boolean isCellEditable(int row, int column){
-               return false;
+
+        DefaultTableModel model = new DefaultTableModel(info, title) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
         };
         model.setRowCount(0);
         model.setDataVector(info, title);
-        tblPendientes.setModel(model);
-        
-        TableColumnModel cm = (TableColumnModel) tblPendientes.getColumnModel();
-        cm.getColumn(0).setPreferredWidth(130);
+        tblProgreso.setModel(model);
        
-        tblPendientes.setColumnModel(cm);
-        tblPendientes.setRowHeight(34);
+        TableColumnModel cm = (TableColumnModel) tblProgreso.getColumnModel();
+        cm.getColumn(0).setPreferredWidth(130);
+        
+        tblProgreso.setColumnModel(cm);
+        tblProgreso.setRowHeight(34);
     }
-    
+
     private void taNombreMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taNombreMouseMoved
         String texto = "Nombre de la tarea";
         taNombre.setToolTipText(texto);
@@ -424,7 +422,10 @@ public class editarTarea extends javax.swing.JFrame {
         String texto = "Registrar tarea en la lista de pendiente";
         btnActualizar.setToolTipText(texto);
     }//GEN-LAST:event_btnActualizarMouseMoved
-
+    public void limpiarCampos() {
+        this.taNombre.setText("");
+        this.taDesc.setText("");
+    }
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         if (nombreValido(taNombre.getText()) && descValida(taDesc.getText())) {
             if (tareaRepetida(taNombre.getText()) != true) {
@@ -432,18 +433,18 @@ public class editarTarea extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "La tarea se actualizo exitosamente");
                 this.principal.conTablaPend();
                 this.dispose();
-                ventana.conTablaEP();
+               
                 principal.setVisible(true);
                 limpiarCampos();
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(this, "La tarea ya existe",
-                         "Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
+                        "Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "El campo de nombre y/o descripción se encuentran vacios",
-                     "Error al registrar tarea", JOptionPane.WARNING_MESSAGE);
+                    "Error al registrar tarea", JOptionPane.WARNING_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnCerrarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseMoved
@@ -457,7 +458,6 @@ public class editarTarea extends javax.swing.JFrame {
             this.dispose();
 
         }
-
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnLimpiarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseMoved
@@ -466,10 +466,6 @@ public class editarTarea extends javax.swing.JFrame {
         btnLimpiar.setToolTipText(texto);
     }//GEN-LAST:event_btnLimpiarMouseMoved
 
-    public void limpiarCampos() {
-        this.taNombre.setText("");
-        this.taDesc.setText("");
-    }
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnLimpiarActionPerformed
@@ -481,7 +477,7 @@ public class editarTarea extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int eleccion = JOptionPane.showConfirmDialog(null, "Si elimna esta tarea no podra recuperarla. ¿Desea eliminarla?", "Confirmar eliminacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (JOptionPane.YES_OPTION == eleccion) {
-            eliminarTareaPend();
+            eliminarTareaProgreso();
             this.principal.conTablaPend();
             this.dispose();
             ventana.dispose();
@@ -489,11 +485,24 @@ public class editarTarea extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void tblPendientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendientesMouseClicked
- if (tblPendientes.getSelectedRow() != -1) {
-            int p = tblPendientes.getSelectedRow();
-            taNombre.setText(tblPendientes.getValueAt(p, 0).toString());
-             ArrayList<Tarea> listaTareaPend = this.pendientesDAO.consultar();
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+
+
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        editarTarea editar = new editarTarea();
+        editar.setVisible(true);
+        ventana.dispose();
+        dispose();       
+    }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void tblProgresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProgresoMouseClicked
+ if (tblProgreso.getSelectedRow() != -1) {
+            int p = tblProgreso.getSelectedRow();
+            taNombre.setText(tblProgreso.getValueAt(p, 0).toString());
+             ArrayList<Tarea> listaTareaPend = this.epDAO.consultar();
+             
         for (Tarea tAE : listaTareaPend) {
             if (tAE.getId().equals(this.obtenerID())) {
                 String desc =tAE.getDescripcion();
@@ -503,36 +512,7 @@ public class editarTarea extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Al seleccionar una fila puede ocasionar cambios");
  }
-        int col = tblPendientes.getColumnModel().getColumnIndexAtX(evt.getX());
-        int fila = evt.getY()/tblPendientes.getRowHeight();
-        if (fila < tblPendientes.getRowCount() && fila >= 0 && col < tblPendientes.getColumnCount() && col >= 0) {
-            Object value = tblPendientes.getValueAt(fila, col);
-            if (value instanceof JButton) {
-                ((JButton) value).doClick();
-                JButton boton = (JButton)value;
-                if (boton.getName().equals("Eliminar")) {
-                    int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
-                        "Confirmación", JOptionPane.YES_NO_OPTION);
-                    if (dialog == JOptionPane.YES_OPTION) {
-                        eliminarTareaPend();
-                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas pendientes",
-                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
-                    }else{
-                        JOptionPane.showConfirmDialog(this, "La tarea no eliminada",
-                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
-                    }
-                }
-            }
-        }
-    }//GEN-LAST:event_tblPendientesMouseClicked
-
-    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
-                editarEnProgreso editar = new editarEnProgreso();
-        editar.setVisible(true);
-        ventana.dispose();
-        dispose();
-        
-    }//GEN-LAST:event_jMenu2MouseClicked
+    }//GEN-LAST:event_tblProgresoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -551,46 +531,44 @@ public class editarTarea extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(editarTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editarEnProgreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(editarTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editarEnProgreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(editarTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editarEnProgreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(editarTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editarEnProgreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new editarTarea().setVisible(true);
-          
+                new editarEnProgreso().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane barra1;
     public javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnCerrar;
     public javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    public javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JMenuBar menu;
-    private javax.swing.JPanel pnlPendientes;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JPanel pnlEnProgreso;
     private javax.swing.JTextArea taDesc;
     private javax.swing.JTextArea taNombre;
-    public javax.swing.JTable tblPendientes;
+    private javax.swing.JTable tblProgreso;
     // End of variables declaration//GEN-END:variables
 class Fondopanel extends JPanel {
 
