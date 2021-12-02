@@ -19,8 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import objetosNegocio.Tarea;
 import org.bson.types.ObjectId;
-import pruebas.Render;
-import sun.swing.UIAction;
 
 /**
  *
