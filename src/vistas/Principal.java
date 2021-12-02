@@ -686,7 +686,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarMouseMoved
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
-
+       
         registrarTarea regTarea = new registrarTarea();
         regTarea.setVisible(true);
         dispose();

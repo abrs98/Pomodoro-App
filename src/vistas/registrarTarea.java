@@ -37,7 +37,7 @@ public class registrarTarea extends javax.swing.JFrame {
         setResizable(false);
         this.setTitle("Registrar tarea");
         this.principal.conTablaPend();
-        ventana.setVisible(true); 
+        ventana.setVisible(true);
     }
 
     public boolean nombreValido(String nombre) {
@@ -110,7 +110,6 @@ public class registrarTarea extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(102, 102, 255,80));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(204, 0, 204), null, java.awt.Color.lightGray));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nombre:");
 
@@ -124,7 +123,6 @@ public class registrarTarea extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(taNombre);
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Descripción:");
 
@@ -145,6 +143,11 @@ public class registrarTarea extends javax.swing.JFrame {
         btnRegTarea.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnRegTareaMouseMoved(evt);
+            }
+        });
+        btnRegTarea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegTareaMouseClicked(evt);
             }
         });
         btnRegTarea.addActionListener(new java.awt.event.ActionListener() {
@@ -251,7 +254,7 @@ public class registrarTarea extends javax.swing.JFrame {
                 this.dispose();
                 ventana.dispose();
                 principal.setVisible(true);
-               
+                 limpiarCampos();
             } else {
                 JOptionPane.showMessageDialog(this, "La tarea ya existe",
                          "Error al querer registrar tarea", JOptionPane.WARNING_MESSAGE);
@@ -260,7 +263,7 @@ public class registrarTarea extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El campo de nombre y/o descripción se encuentran vacios",
                      "Error al registrar tarea", JOptionPane.WARNING_MESSAGE);
         }
-        limpiarCampos();
+       
          
 
     }//GEN-LAST:event_btnRegTareaActionPerformed
@@ -305,6 +308,10 @@ public class registrarTarea extends javax.swing.JFrame {
        String texto = "Registrar tarea en la lista de pendiente";
         btnRegTarea.setToolTipText(texto);
     }//GEN-LAST:event_btnRegTareaMouseMoved
+
+    private void btnRegTareaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegTareaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegTareaMouseClicked
 
     /**
      * @param args the command line arguments
