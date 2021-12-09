@@ -639,7 +639,6 @@ public class Principal extends javax.swing.JFrame {
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
         // TODO add your handling code here:
 
-        if (pomodoro) {
             //Si hay una tarea en progreso
             if (tblProgreso.getModel().getRowCount() != -1) {
                 int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
@@ -666,7 +665,9 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showConfirmDialog(this, "Ninguna tarea en progreso",
                         "Advertencia", JOptionPane.PLAIN_MESSAGE);
             }
-        } else if (descanso) {
+        
+        
+        if (descanso) {
             if (JOptionPane.showConfirmDialog(null, "Desea terminar el descanso?") == 0) {
                 pomodoro = true;
             }
@@ -721,12 +722,12 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:\
 
         btnRestablecer.setEnabled(true);
+        pomodoro = true;
         //Si no existe ninguna tarea en la tabla de progreso
         if (tblProgreso.getRowCount() != 1) {
             //Si se selecciona una tarea de la tabla pendientes
             if (tblPendientes.getSelectedRow() != -1) {
                 INICIA = true;
-                pomodoro = true;
                 checkTime();
                 btnIniciar.setEnabled(false);
                 iniciar();
@@ -736,7 +737,6 @@ public class Principal extends javax.swing.JFrame {
                 //Si no se selecciona una tarea de la tabla pendientes
             } else if (tblPendientes.getSelectedRow() == -1) {
                 INICIA = true;
-                pomodoro = true;
                 checkTime();
                 btnIniciar.setEnabled(false);
                 iniciarSinSeleccionPrimero();
@@ -758,7 +758,6 @@ public class Principal extends javax.swing.JFrame {
             //Si existe una tarea en progreso
         } else if (tblProgreso.getRowCount() == 1) {
             INICIA = true;
-            pomodoro = true;
             checkTime();
             btnIniciar.setEnabled(false);
 
@@ -791,15 +790,22 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnRestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestablecerActionPerformed
         // TODO add your handling code here:
+        int res= JOptionPane.showConfirmDialog(null, "¿Desea Restablecer el conteo de Pomodoros?");
+        if(res==JOptionPane.YES_OPTION){
         lblPm.setText("POMODORO");
         restablecer = true;
+        INICIA=false;
+        pomodoro=false;
+        PAUSA=false;
         POMODORO = 1;
         NUMDESCANSO=0;
         lblPomodoro.setText(String.valueOf(POMODORO));
         restablecerTemporizador();
         btnRestablecer.setEnabled(false);
         btnIniciar.setText("Iniciar");
+        btnPausar.setEnabled(false);
         actualizar();
+        }
     }//GEN-LAST:event_btnRestablecerActionPerformed
 
     private void tblPendientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendientesMouseClicked
