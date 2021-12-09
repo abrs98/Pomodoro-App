@@ -27,11 +27,12 @@ import pruebas.Render;
  */
 public class Principal extends javax.swing.JFrame {
 
-    JButton eliminar ; //nuevo junto con la clase Render
+    JButton eliminar; //nuevo junto con la clase Render
     private PendientesDAO pDAO = null;
     private EnProcesoDAO epDAO = null;
     private TerminadasDAO tDAO = null;
     private int POMODORO = 1;
+    private int NUMDESCANSO = 0;
 
     private Tarea tM = null;
     private ObjectId id;
@@ -56,21 +57,22 @@ public class Principal extends javax.swing.JFrame {
         this.epDAO = new EnProcesoDAO();
         this.tDAO = new TerminadasDAO();
         initComponents();
-        
-        eliminar= new JButton(); //nuevo
+
+        eliminar = new JButton(); //nuevo
         eliminar.setName("Eliminar"); //nuevo
         eliminar.setVisible(true); //nuevo
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Tecnica Pomodoro");
         this.tblTerminadas.setEnabled(false);
+        conTablaPend();
+        conTablaEP();
+        conTablaTerm();
         this.btnTermIsEnable();
         this.btnIniciarIsEnable();
         this.btnPausaIsEnable();
         this.btnCancelarIsEnable();
-        conTablaPend();
-        conTablaEP();
-        conTablaTerm();
+        actualizar();
     }
 
     public Principal(Tarea tareita) {
@@ -80,21 +82,22 @@ public class Principal extends javax.swing.JFrame {
         this.tDAO = new TerminadasDAO();
         this.tM = tareita;
         initComponents();
-        
-        eliminar= new JButton(); //nuevo
+
+        eliminar = new JButton(); //nuevo
         eliminar.setName("Eliminar"); //nuevo
         eliminar.setVisible(true); //nuevo
         this.setLocationRelativeTo(this);
         setResizable(false);
         this.setTitle("Tecnica Pomodoro");
         this.tblTerminadas.setEnabled(false);
+        conTablaPend();
+        conTablaEP();
+        conTablaTerm();
         this.btnTermIsEnable();
         this.btnIniciarIsEnable();
         this.btnPausaIsEnable();
         this.btnCancelarIsEnable();
-        conTablaPend();
-        conTablaEP();
-        conTablaTerm();
+        actualizar();
     }
 
     @SuppressWarnings("unchecked")
@@ -132,7 +135,7 @@ public class Principal extends javax.swing.JFrame {
         btnRestablecer = new javax.swing.JButton();
         lblPm = new javax.swing.JLabel();
         lblPomodoro = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblTarea = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -491,8 +494,8 @@ public class Principal extends javax.swing.JFrame {
         lblPomodoro.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         lblPomodoro.setText("#");
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel5.setText("Tarea");
+        lblTarea.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblTarea.setText("Tarea");
 
         jSeparator5.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -544,8 +547,8 @@ public class Principal extends javax.swing.JFrame {
                                 .addGap(39, 39, 39)
                                 .addComponent(lblPomodoro))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(137, 137, 137)
-                                .addComponent(jLabel5)))
+                                .addGap(67, 67, 67)
+                                .addComponent(lblTarea)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
@@ -558,7 +561,7 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(lblPm)
                     .addComponent(lblPomodoro))
                 .addGap(12, 12, 12)
-                .addComponent(jLabel5)
+                .addComponent(lblTarea)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -637,15 +640,22 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         if (pomodoro) {
-            if (tblProgreso.getSelectedRow() != -1) {
+            //Si hay una tarea en progreso
+            if (tblProgreso.getModel().getRowCount() != -1) {
                 int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
                         "Confirmación", JOptionPane.YES_NO_OPTION);
                 if (dialog == JOptionPane.YES_OPTION) {
+                    //Si se selecciono una tarea a eliminar
+                    //if(tblProgreso.getSelectedRow()!=-1){
                     Terminar();
                     eliminarTareaProgreso();
+                    // }else if(tblProgreso.getSelectedRow()==-1){
+
+                    // }
                     String texto = "Tarea terminada";
                     lblTemporizador.setToolTipText(texto);
                     TERMINA = true;
+
                     JOptionPane.showConfirmDialog(this, "¡La tarea fue terminada con exito!",
                             "Mensaje", JOptionPane.PLAIN_MESSAGE);
                 } else {
@@ -653,7 +663,7 @@ public class Principal extends javax.swing.JFrame {
                             "Mensaje", JOptionPane.PLAIN_MESSAGE);
                 }
             } else {
-                JOptionPane.showConfirmDialog(this, "Ninguna tarea ha sido seleccionada",
+                JOptionPane.showConfirmDialog(this, "Ninguna tarea en progreso",
                         "Advertencia", JOptionPane.PLAIN_MESSAGE);
             }
         } else if (descanso) {
@@ -662,7 +672,7 @@ public class Principal extends javax.swing.JFrame {
             }
         }
 
-
+        actualizar();
     }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnTerminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTerminarMouseMoved
@@ -678,6 +688,7 @@ public class Principal extends javax.swing.JFrame {
         btnIniciar.setEnabled(true);
         btnPausar.setEnabled(false);
         btnIniciar.setText("Reanudar");
+        actualizar();
     }//GEN-LAST:event_btnPausarActionPerformed
 
     private void btnPausarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPausarMouseMoved
@@ -693,7 +704,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarMouseMoved
 
     private void btnRegistrarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarTareaActionPerformed
-       
+
         registrarTarea regTarea = new registrarTarea();
         regTarea.setVisible(true);
         dispose();
@@ -708,17 +719,28 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:\
-        
+
         btnRestablecer.setEnabled(true);
+        //Si no existe ninguna tarea en la tabla de progreso
         if (tblProgreso.getRowCount() != 1) {
+            //Si se selecciona una tarea de la tabla pendientes
             if (tblPendientes.getSelectedRow() != -1) {
                 INICIA = true;
                 pomodoro = true;
                 checkTime();
                 btnIniciar.setEnabled(false);
-
                 iniciar();
                 eliminarTareaPend();
+                conTablaEP();
+                btnCancelarIsEnable();
+                //Si no se selecciona una tarea de la tabla pendientes
+            } else if (tblPendientes.getSelectedRow() == -1) {
+                INICIA = true;
+                pomodoro = true;
+                checkTime();
+                btnIniciar.setEnabled(false);
+                iniciarSinSeleccionPrimero();
+                eliminarPrimerTareaPend();
                 conTablaEP();
                 btnCancelarIsEnable();
 
@@ -733,6 +755,7 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showConfirmDialog(this, "Ninguna tarea ha sido seleccionada",
                         "Advertencia", JOptionPane.PLAIN_MESSAGE);
             }
+            //Si existe una tarea en progreso
         } else if (tblProgreso.getRowCount() == 1) {
             INICIA = true;
             pomodoro = true;
@@ -746,6 +769,7 @@ public class Principal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "No puedes ejecutar otra tarea!!!");
         }
+        actualizar();
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void bntEditarTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntEditarTareaActionPerformed
@@ -770,32 +794,35 @@ public class Principal extends javax.swing.JFrame {
         lblPm.setText("POMODORO");
         restablecer = true;
         POMODORO = 1;
+        NUMDESCANSO=0;
         lblPomodoro.setText(String.valueOf(POMODORO));
         restablecerTemporizador();
         btnRestablecer.setEnabled(false);
+        btnIniciar.setText("Iniciar");
+        actualizar();
     }//GEN-LAST:event_btnRestablecerActionPerformed
 
     private void tblPendientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendientesMouseClicked
         int col = tblPendientes.getColumnModel().getColumnIndexAtX(evt.getX());
-        int fila = evt.getY()/tblPendientes.getRowHeight();
+        int fila = evt.getY() / tblPendientes.getRowHeight();
         if (fila < tblPendientes.getRowCount() && fila >= 0 && col < tblPendientes.getColumnCount() && col >= 0) {
             Object value = tblPendientes.getValueAt(fila, col);
             if (value instanceof JButton) {
                 ((JButton) value).doClick();
-                JButton boton = (JButton)value;
+                JButton boton = (JButton) value;
                 if (boton.getName().equals("Eliminar")) {
                     int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
-                    "Confirmación", JOptionPane.YES_NO_OPTION);
+                            "Confirmación", JOptionPane.YES_NO_OPTION);
                     if (dialog == JOptionPane.YES_OPTION) {
                         eliminarTareaPend();
                         btnCancelarIsEnable();
                         btnIniciarIsEnable();
                         btnPausaIsEnable();
-                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas pendientes", 
-                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
-                }else{
-                    JOptionPane.showConfirmDialog(this, "La tarea no eliminada", 
-                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas pendientes",
+                                "Mensaje", JOptionPane.PLAIN_MESSAGE);
+                    } else {
+                        JOptionPane.showConfirmDialog(this, "La tarea no eliminada",
+                                "Mensaje", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
             }
@@ -804,26 +831,26 @@ public class Principal extends javax.swing.JFrame {
 
     private void tblProgresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProgresoMouseClicked
         int col = tblProgreso.getColumnModel().getColumnIndexAtX(evt.getX());
-        int fila = evt.getY()/tblProgreso.getRowHeight();
+        int fila = evt.getY() / tblProgreso.getRowHeight();
         if (fila < tblProgreso.getRowCount() && fila >= 0 && col < tblProgreso.getColumnCount() && col >= 0) {
             Object value = tblProgreso.getValueAt(fila, col);
             if (value instanceof JButton) {
                 ((JButton) value).doClick();
-                JButton boton = (JButton)value;
+                JButton boton = (JButton) value;
                 if (boton.getName().equals("Eliminar")) {
                     int dialog = JOptionPane.showConfirmDialog(this, "¿Seguro que desea terminar esta tarea?",
-                    "Confirmación", JOptionPane.YES_NO_OPTION);
+                            "Confirmación", JOptionPane.YES_NO_OPTION);
                     if (dialog == JOptionPane.YES_OPTION) {
                         eliminarTareaProgreso();
                         btnCancelarIsEnable();
                         btnIniciarIsEnable();
                         btnPausaIsEnable();
                         btnTermIsEnable();
-                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas en progreso", 
-                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
-                }else{
-                    JOptionPane.showConfirmDialog(this, "La tarea no eliminada", 
-                            "Mensaje",JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showConfirmDialog(this, "Se ha eliminado esta tarea \nde la lista de tareas en progreso",
+                                "Mensaje", JOptionPane.PLAIN_MESSAGE);
+                    } else {
+                        JOptionPane.showConfirmDialog(this, "La tarea no eliminada",
+                                "Mensaje", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
             }
@@ -846,17 +873,17 @@ public class Principal extends javax.swing.JFrame {
         return dtf.format(LocalDateTime.now());
     }
 
-    public Object[][] tareasP(){ //Se actualizo este metodo
+    public Object[][] tareasP() { //Se actualizo este metodo
         ArrayList<Tarea> listTareas = this.pDAO.consultar();
-        Object[][] pend= new Object[listTareas.size()][2];
+        Object[][] pend = new Object[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
             pend[i][0] = listTareas.get(i).getNombre();
             pend[i][1] = eliminar;
         }
-        return  pend;
+        return pend;
     }
 
-    public Object[][] tareasEP(){ //Se actualizo este metodo
+    public Object[][] tareasEP() { //Se actualizo este metodo
         ArrayList<Tarea> listTareas = this.epDAO.consultar();
         Object[][] enpro = new Object[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
@@ -866,9 +893,9 @@ public class Principal extends javax.swing.JFrame {
         return enpro;
     }
 
-     public Object[][] tareasT(){ //Se actualizo este metodo
+    public Object[][] tareasT() { //Se actualizo este metodo
         ArrayList<Tarea> listTareas = this.tDAO.consultar();
-        Object[][] term= new Object[listTareas.size()][2];
+        Object[][] term = new Object[listTareas.size()][2];
         for (int i = 0; i < listTareas.size(); i++) {
             term[i][0] = listTareas.get(i).getNombre();
             term[i][1] = listTareas.get(i).getFecha(); //se agrego que en la columna dos aparezca la fecha
@@ -876,13 +903,13 @@ public class Principal extends javax.swing.JFrame {
         return term;
     }
 
-    public void conTablaPend(){ //Se actualizo este metodo para que agreugue el boton eliminar
-        Object title[] = {"Nombre",""};
+    public void conTablaPend() { //Se actualizo este metodo para que agreugue el boton eliminar
+        Object title[] = {"Nombre", ""};
         Object info[][] = tareasP();
-       
-        DefaultTableModel model =  new DefaultTableModel(info, title){
-            public boolean isCellEditable(int row, int column){
-               return false;
+
+        DefaultTableModel model = new DefaultTableModel(info, title) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
         };
         model.setRowCount(0);
@@ -896,14 +923,14 @@ public class Principal extends javax.swing.JFrame {
         tblPendientes.setRowHeight(34);
     }
 
-    public void conTablaEP(){ //Se actualizo este metodo para que agreugue el boton eliminar
-        Object title[] = {"Nombre",""};
+    public void conTablaEP() { //Se actualizo este metodo para que agreugue el boton eliminar
+        Object title[] = {"Nombre", ""};
         Object info[][] = tareasEP();
-        DefaultTableModel model = new DefaultTableModel(info, title){
-             public boolean isCellEditable(int fila, int cols){
-               return false;
+        DefaultTableModel model = new DefaultTableModel(info, title) {
+            public boolean isCellEditable(int fila, int cols) {
+                return false;
             }
-        }; 
+        };
         model.setRowCount(0);
         model.setDataVector(info, title);
         tblProgreso.setModel(model);
@@ -918,12 +945,12 @@ public class Principal extends javax.swing.JFrame {
         tblProgreso.setRowHeight(34);
     }
 
-    public void conTablaTerm(){
+    public void conTablaTerm() {
         Object title[] = {"Nombre", "Fecha"}; //aqui cree otra columna que se llama fecha
         Object info[][] = tareasT();
-        DefaultTableModel model = new DefaultTableModel(info, title){
-             public boolean isCellEditable(int fila, int cols){
-               return false;
+        DefaultTableModel model = new DefaultTableModel(info, title) {
+            public boolean isCellEditable(int fila, int cols) {
+                return false;
             }
         };
         model.setRowCount(0);
@@ -947,9 +974,10 @@ public class Principal extends javax.swing.JFrame {
     public void btnIniciarIsEnable() {
         DefaultTableModel tabVacia = (DefaultTableModel) tblPendientes.getModel();
         DefaultTableModel tabVaciaProgreso = (DefaultTableModel) tblProgreso.getModel();
-        if (tabVacia.getRowCount() >= 1) {
+
+        if (tabVacia.getRowCount() >= 1 && !INICIA) {
             btnIniciar.setEnabled(true);
-        } else if (tabVaciaProgreso.getRowCount() >= 1) {
+        } else if (tabVaciaProgreso.getRowCount() >= 1 && !INICIA) {
             btnIniciar.setEnabled(true);
         } else {
             btnIniciar.setEnabled(false);
@@ -964,6 +992,7 @@ public class Principal extends javax.swing.JFrame {
             brnCancelar.setEnabled(false);
         }
     }
+
     //Ver despues
     public void btnRestablecerIsEnable() {
         DefaultTableModel tabVacia = (DefaultTableModel) tblProgreso.getModel();
@@ -991,7 +1020,27 @@ public class Principal extends javax.swing.JFrame {
             desc = listaTareaS.get(fila).getDescripcion();
         }
         Tarea tareaEP = new Tarea(name, desc, status);
+        tM = tareaEP;
+        lblTarea.setText(name);
         epDAO.agregar(tareaEP);
+        conTablaEP();
+        btnTermIsEnable();
+
+    }
+
+    public void iniciarSinSeleccionPrimero() {
+        String name = "", desc = "", status = "En Progreso";
+        int fila = 0;
+        String valor = this.tblPendientes.getValueAt(fila, 0).toString();
+        ArrayList<Tarea> listaTareaS = this.pDAO.consultar();
+        for (int i = fila; i < listaTareaS.size(); i++) {
+            name = listaTareaS.get(fila).getNombre();
+            desc = listaTareaS.get(fila).getDescripcion();
+        }
+        Tarea tareaEP = new Tarea(name, desc, status);
+        epDAO.agregar(tareaEP);
+        tM = tareaEP;
+        lblTarea.setText(name);
         conTablaEP();
         btnTermIsEnable();
 
@@ -999,7 +1048,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void Terminar() {
         String name = "", desc = "", status = "Terminada", fecha = obtenerFechaHora();
-        int fila = this.tblProgreso.getSelectedRow();
+        int fila = 0;
         String valor = this.tblProgreso.getValueAt(fila, 0).toString();
         ArrayList<Tarea> listaTareaS = this.epDAO.consultar();
         for (int i = fila; i < listaTareaS.size(); i++) {
@@ -1039,8 +1088,21 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    public void eliminarPrimerTareaPend() {
+        int fila = 0;
+        JOptionPane.showMessageDialog(null, fila);
+        DefaultTableModel tareasP = (DefaultTableModel) this.tblPendientes.getModel();
+        tareasP.removeRow(fila);
+        ArrayList<Tarea> listaTareaPend = this.pDAO.consultar();
+        for (Tarea tAE : listaTareaPend) {
+            if (tAE.getId().equals(this.obtenerID())) {
+                this.pDAO.eliminar(tAE);
+            }
+        }
+    }
+
     public void eliminarTareaProgreso() {
-        int fila2 = this.tblProgreso.getSelectedRow();
+        int fila2 = 0;
         DefaultTableModel tareasProg = (DefaultTableModel) this.tblProgreso.getModel();
         tareasProg.removeRow(fila2);
         ArrayList<Tarea> listaTareaProg = this.epDAO.consultar();
@@ -1086,13 +1148,13 @@ public class Principal extends javax.swing.JFrame {
                     lblTemporizador.setText(min + ":" + seg);
                     segundos++;
                     lblPomodoro.setText(String.valueOf(POMODORO));
-
+                    //Aumento progresivo de tiempo
                     if (segundos > 59) {
                         minutos++;
                         segundos = 0;
                     }
-
-                    if (minutos == 0 && segundos == 10 && pomodoro) {
+                    //Alerta y opcion de termino de Pomodoro
+                    if (minutos == 0 && segundos == 20 && pomodoro) {
                         if (JOptionPane.showConfirmDialog(null, "Quedan 5 segundos para terminar el pomodoro desea acabarlo?") == 0) {
                             pomodoro = false;
                             descanso = true;
@@ -1101,16 +1163,48 @@ public class Principal extends javax.swing.JFrame {
                             restablecerTemporizador();
                         }
                     }
-
-                    if (minutos == 0 && segundos == 15 && pomodoro) {
+                    // Termino Automatico de pomodoro
+                    if (minutos == 0 && segundos == 25 && pomodoro) {
 
                         pomodoro = false;
                         descanso = true;
-                        lblPm.setText("Descansando");
-                        lblPomodoro.setText("");
+                        //Si no es el ultimo descanso aumenta el numero de descanso
+                        if (NUMDESCANSO < 4) {
+                            NUMDESCANSO++;
+                        }
+                        lblPm.setText("DESCANSO ");
+                        lblPomodoro.setText(String.valueOf(NUMDESCANSO));
+
                         restablecerTemporizador();
 
                     }
+                    //Si se alcanza los 5 min del tiempo de descanso y no es el ultimo se termina
+                    if (minutos == 0 && segundos == 5 && descanso&&NUMDESCANSO<4) {
+
+                        pomodoro = true;
+                        descanso = false;
+                        POMODORO++;
+
+                        lblPm.setText("POMODORO ");
+                        lblPomodoro.setText(String.valueOf(POMODORO));
+                        restablecerTemporizador();
+
+                    }
+                    
+                    if (minutos == 0 && segundos == 20 && descanso&&NUMDESCANSO==4) {
+
+                        pomodoro = true;
+                        descanso = false;
+                        POMODORO++;
+                        NUMDESCANSO=0;
+
+                        lblPm.setText("POMODORO ");
+                        lblPomodoro.setText(String.valueOf(POMODORO));
+                        restablecerTemporizador();
+
+                    }
+                    
+                    
                 } else if (PAUSA) {
                     JOptionPane.showMessageDialog(null, "Se ha pausado el temporizador");
                     cancel();
@@ -1175,7 +1269,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1188,6 +1281,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JLabel lblPm;
     private javax.swing.JLabel lblPomodoro;
+    private javax.swing.JLabel lblTarea;
     private javax.swing.JLabel lblTemporizador;
     private javax.swing.JPanel pnlEnProgreso;
     private javax.swing.JPanel pnlPendientes;
